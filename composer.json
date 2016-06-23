@@ -11,6 +11,10 @@
         {
             "type": "vcs",
             "url": "https://github.com/iris-it/eloquent-oauth-l5"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/iris-it/irispass-shared"
         }
     ],
     "require": {
@@ -20,7 +24,8 @@
         "laravelcollective/html": "5.2.*",
         "adamwathan/eloquent-oauth-l5": "dev-master",
         "philo/laravel-translate": "^2.0",
-        "laracasts/flash": "^2.0"
+        "laracasts/flash": "^2.0",
+        "iris-it/irispass-shared": "dev-master"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

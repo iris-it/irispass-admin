@@ -1,6 +1,6 @@
 <?php
 
-use App\User;
+use Irisit\IrispassShared\Model\User;
 
 return [
     'model' => User::class,

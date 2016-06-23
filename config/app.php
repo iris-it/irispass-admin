@@ -163,6 +163,7 @@ return [
         Collective\Html\HtmlServiceProvider::class,
         Laracasts\Flash\FlashServiceProvider::class,
         Philo\Translate\TranslateServiceProvider::class,
+        Irisit\IrispassShared\IrispassSharedProvider::class,
 
     ],
 

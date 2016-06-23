@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "28e95c667599963a2329951cf328902c",
-    "content-hash": "7daab154a1abec9c5d912533ec59bbc9",
+    "hash": "a4f103387cc123ef11a487d66fba26e1",
+    "content-hash": "396b12be3d8091fde0bdd0e28cffa248",
     "packages": [
         {
             "name": "adamwathan/eloquent-oauth",
@@ -430,6 +430,45 @@
                 "uri"
             ],
             "time": "2016-04-13 19:56:01"
+        },
+        {
+            "name": "iris-it/irispass-shared",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/iris-it/irispass-shared.git",
+                "reference": "16a8d7e9584ed7a3f8887e0d02e5a8ab8807f620"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/iris-it/irispass-shared/zipball/16a8d7e9584ed7a3f8887e0d02e5a8ab8807f620",
+                "reference": "16a8d7e9584ed7a3f8887e0d02e5a8ab8807f620",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/framework": "5.2.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Irisit\\IrispassShared\\": "src/"
+                }
+            },
+            "license": [
+                "BSD"
+            ],
+            "authors": [
+                {
+                    "name": "Alexandre",
+                    "email": "alexandre.mangin@viacesi.fr"
+                }
+            ],
+            "description": "Shared models / services",
+            "support": {
+                "source": "https://github.com/iris-it/irispass-shared/tree/master",
+                "issues": "https://github.com/iris-it/irispass-shared/issues"
+            },
+            "time": "2016-06-23 22:24:24"
         },
         {
             "name": "jakub-onderka/php-console-color",
@@ -3956,7 +3995,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "adamwathan/eloquent-oauth-l5": 20
+        "adamwathan/eloquent-oauth-l5": 20,
+        "iris-it/irispass-shared": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
