@@ -159,16 +159,10 @@ return [
         /*
         * Added
         */
-        Dingo\Api\Provider\LaravelServiceProvider::class,
-        Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
-
         AdamWathan\EloquentOAuthL5\EloquentOAuthServiceProvider::class,
-
         Collective\Html\HtmlServiceProvider::class,
         Laracasts\Flash\FlashServiceProvider::class,
-        
         Philo\Translate\TranslateServiceProvider::class,
-
 
     ],
 
@@ -219,11 +213,7 @@ return [
         /*
          * Added
          */
-        'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class,
-        'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,
-
         'SocialAuth' => AdamWathan\EloquentOAuth\Facades\OAuth::class,
-
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
         'Flash' => Laracasts\Flash\Flash::class,

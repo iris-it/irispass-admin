@@ -1,5 +1,5 @@
 <header class="main-header">
-    <a href="{{action('App\HomeController@index')}}" class="logo">
+    <a href="{{action('HomeController@index')}}" class="logo">
         <span class="logo-mini"><b>I</b>PASS</span>
         <span class="logo-lg"><b>Iris</b>PASS</span>
     </a>
@@ -20,10 +20,10 @@
                     <ul class="dropdown-menu">
                         <li class="user-footer">
                             <div class="pull-left">
-                                <user-profile action="{{action('App\AuthController@userProfile')}}"></user-profile>
+                                <user-profile action="{{action('AuthController@userProfile')}}"></user-profile>
                             </div>
                             <div class="pull-right">
-                                <logout action="{{action('App\AuthController@logout')}}"></logout>
+                                <logout action="{{action('AuthController@logout')}}"></logout>
                             </div>
                         </li>
                     </ul>
