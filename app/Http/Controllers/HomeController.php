@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests;
+use App\Services\KeycloakService;
 
 class HomeController extends Controller
 {
@@ -21,8 +22,11 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(KeycloakService $keycloakService)
     {
+
+        $keycloakService->getToken()->getUsers();
+
         return view('pages.home.index');
     }
 }

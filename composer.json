@@ -25,7 +25,9 @@
         "adamwathan/eloquent-oauth-l5": "dev-master",
         "philo/laravel-translate": "^2.0",
         "laracasts/flash": "^2.0",
-        "iris-it/irispass-shared": "dev-master"
+        "iris-it/irispass-shared": "dev-master",
+        "guzzlehttp/guzzle": "~6.0",
+        "webpatser/laravel-uuid": "2.*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
