@@ -65,7 +65,7 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => 'fr',
 
     /*
     |--------------------------------------------------------------------------
@@ -164,6 +164,8 @@ return [
         Laracasts\Flash\FlashServiceProvider::class,
         Philo\Translate\TranslateServiceProvider::class,
         Irisit\IrispassShared\IrispassSharedProvider::class,
+        DaveJamesMiller\Breadcrumbs\ServiceProvider::class,
+
 
     ],
 
@@ -219,6 +221,8 @@ return [
         'Html' => Collective\Html\HtmlFacade::class,
         'Flash' => Laracasts\Flash\Flash::class,
         'Uuid' => Webpatser\Uuid\Uuid::class,
+        'Breadcrumbs' => DaveJamesMiller\Breadcrumbs\Facade::class,
+
 
     ],
 

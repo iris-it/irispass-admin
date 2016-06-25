@@ -54,6 +54,11 @@ return [
             'visibility' => 'public',
         ],
 
+        'osjs' => [
+            'driver' => 'local',
+            'root' => env('OSJS_VFS_PATH'),
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => 'your-key',

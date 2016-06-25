@@ -3,18 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests;
-use App\Services\KeycloakService;
 
 class HomeController extends Controller
 {
+    private $organization;
+
     /**
      * Create a new controller instance.
      *
-     * @return void
      */
     public function __construct()
     {
         $this->middleware('auth');
+
+        $this->middleware('hasOrganization');
+
+        //$this->organization = Auth::user()->organization()->first();
     }
 
     /**
@@ -22,10 +26,13 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(KeycloakService $keycloakService)
+    public function index()
     {
+        //$organization = $this->organization;
 
-        $keycloakService->getToken()->getUsers();
+        //$groups = $this->organization->groups()->get();
+
+        //$users = $this->organization->users()->get();
 
         return view('pages.home.index');
     }

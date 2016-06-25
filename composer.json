@@ -27,7 +27,8 @@
         "laracasts/flash": "^2.0",
         "iris-it/irispass-shared": "dev-master",
         "guzzlehttp/guzzle": "~6.0",
-        "webpatser/laravel-uuid": "2.*"
+        "webpatser/laravel-uuid": "2.*",
+        "davejamesmiller/laravel-breadcrumbs": "^3.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

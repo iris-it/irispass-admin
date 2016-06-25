@@ -42,7 +42,8 @@ var less_paths = [];
 var libraries = [
     paths.jquery + "dist/jquery.min.js",
     paths.bootstrap + "js/bootstrap.js",
-    paths.adminlte + "js/app.js"
+    paths.adminlte + "js/app.js",
+    paths.assets + "js/laravel.js"
 ];
 
 var fonts = [

@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "c2b339cf11ef2098a3bb9f38f45d4405",
-    "content-hash": "938cfd219f3106e188b956c839f61776",
+    "hash": "f1c2be1422e89a4ca0daaa94a632695e",
+    "content-hash": "f9f4dc95f6c3832a60f45b1dfbe7f700",
     "packages": [
         {
             "name": "adamwathan/eloquent-oauth",
@@ -159,6 +159,55 @@
                 "preload"
             ],
             "time": "2015-11-09 22:51:51"
+        },
+        {
+            "name": "davejamesmiller/laravel-breadcrumbs",
+            "version": "3.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/davejamesmiller/laravel-breadcrumbs.git",
+                "reference": "5a5d5d1b1f5780359604f7fde11bbf810ff3e9e4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/davejamesmiller/laravel-breadcrumbs/zipball/5a5d5d1b1f5780359604f7fde11bbf810ff3e9e4",
+                "reference": "5a5d5d1b1f5780359604f7fde11bbf810ff3e9e4",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "5.*",
+                "illuminate/view": "5.*",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "0.9.*",
+                "orchestra/testbench": "3.0.*",
+                "phpunit/phpunit": "4.*",
+                "satooshi/php-coveralls": "0.6.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "DaveJamesMiller\\Breadcrumbs\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT License"
+            ],
+            "authors": [
+                {
+                    "name": "Dave James Miller",
+                    "email": "dave@davejamesmiller.com",
+                    "homepage": "http://davejamesmiller.com/"
+                }
+            ],
+            "description": "A simple Laravel-style way to create breadcrumbs in Laravel 4+.",
+            "homepage": "https://github.com/davejamesmiller/laravel-breadcrumbs",
+            "keywords": [
+                "laravel"
+            ],
+            "time": "2015-02-08 21:44:39"
         },
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -437,12 +486,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/iris-it/irispass-shared.git",
-                "reference": "f6b3cc2ed6ae49fa7a3f5177dd7ade2acb3c376f"
+                "reference": "4c015784fae27d2c12719a9e55fa0cf1f199cdb1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/iris-it/irispass-shared/zipball/f6b3cc2ed6ae49fa7a3f5177dd7ade2acb3c376f",
-                "reference": "f6b3cc2ed6ae49fa7a3f5177dd7ade2acb3c376f",
+                "url": "https://api.github.com/repos/iris-it/irispass-shared/zipball/4c015784fae27d2c12719a9e55fa0cf1f199cdb1",
+                "reference": "4c015784fae27d2c12719a9e55fa0cf1f199cdb1",
                 "shasum": ""
             },
             "require": {
@@ -470,7 +519,7 @@
                 "source": "https://github.com/iris-it/irispass-shared/tree/master",
                 "issues": "https://github.com/iris-it/irispass-shared/issues"
             },
-            "time": "2016-06-24 23:20:32"
+            "time": "2016-06-25 07:22:37"
         },
         {
             "name": "jakub-onderka/php-console-color",
