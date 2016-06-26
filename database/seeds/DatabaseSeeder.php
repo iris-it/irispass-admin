@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Irisit\IrispassShared\Seeders\LicenceTableSeeder;
+use Irisit\IrispassShared\Seeders\RoleTableSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -11,6 +13,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // $this->call(UsersTableSeeder::class);
+        $this->call(RoleTableSeeder::class);
+        $this->call(LicenceTableSeeder::class);
     }
 }

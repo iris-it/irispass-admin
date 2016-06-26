@@ -5,12 +5,12 @@
         <table class="table table-hover">
             <thead>
             <tr>
-                <td style="width:20%; font-size:14px;"><b>{{ trans('usersmanagement.userstab-identifier') }}</b></td>
-                <td style="width:20%; font-size:14px;"><b>{{ trans('usersmanagement.userstab-username') }}</b></td>
-                <td style="width:20%; font-size:14px;"><b>{{ trans('usersmanagement.userstab-creation') }}</b></td>
-                <td style="width:20%; font-size:14px;"><b>{{ trans('usersmanagement.userstab-update') }}</b></td>
-                <td style="width:20%; font-size:14px;"><b>{{ trans('usersmanagement.userstab-show') }}</b></td>
-                <td style="width:20%; font-size:14px;"><b>{{ trans('usersmanagement.userstab-destroy') }}</b></td>
+                <td><b>{{ trans('usersmanagement.userstab-identifier') }}</b></td>
+                <td><b>{{ trans('usersmanagement.userstab-username') }}</b></td>
+                <td><b>{{ trans('usersmanagement.userstab-creation') }}</b></td>
+                <td><b>{{ trans('usersmanagement.userstab-update') }}</b></td>
+                <td><b>{{ trans('usersmanagement.userstab-show') }}</b></td>
+                <td><b>{{ trans('usersmanagement.userstab-destroy') }}</b></td>
             </tr>
             </thead>
             <tbody>

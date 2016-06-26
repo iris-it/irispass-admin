@@ -118,7 +118,7 @@ class GroupsController extends Controller
             Flash::error(Lang::get('groups.update-failed'));
         }
 
-        return redirect(action('GroupsController@show', ['id' => $id]));
+        return redirect(action('GroupsController@show', ['id' => $id]) . '#orgagroups');
     }
 
     /**

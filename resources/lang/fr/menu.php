@@ -19,4 +19,12 @@ return [
     'crm' => 'Ma CRM',
     'mail' => 'Service Mail',
 
+    'admin-role' => 'Administrateur',
+    'admin-section' => 'Gestion',
+    'admin-users-link' => 'Utilisateurs',
+    'admin-organizations-link' => 'Organisations',
+    'admin-roles-link' => 'Roles',
+    'admin-permissions-link' => 'Permissions',
+    'admin-licences-link' => 'Licences',
+
 ];

@@ -69,7 +69,7 @@ class OrganizationController extends Controller
         $this->organization->save();
 
         $user->organization()->associate($this->organization);
-
+        $user->role_id = 2;
         $user->save();
 
         Flash::success(Lang::get('organization.create-success'));

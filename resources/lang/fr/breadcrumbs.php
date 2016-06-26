@@ -7,6 +7,7 @@
  */
 
 
+
 return [
 
     /*
@@ -34,5 +35,11 @@ return [
     'edit-group' => 'Édition d\'un groupe',
     'edit-user' => 'Édition d\'un utilisateur',
 
+    'data' => 'Données',
+    'users' => 'Utilisateurs',
+    'roles' => 'Rôles',
+    'permissions' => 'Permissions',
+    'organizations' => 'Organisations',
+    'licences' => 'Licences',
 
 ];

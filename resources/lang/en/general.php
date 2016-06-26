@@ -16,17 +16,39 @@ return [
     'yes' => 'Yes',
     'no' => 'No',
     'go-back' => 'Go back',
-
     'about' => 'About',
-    'lorem' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                sed do eiusmod tempor incididunt ut labore et dolore
-                magna aliqua. Ut enim ad minim veniam, quis nostrud
-                exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                consequat. Duis aute irure dolor in reprehenderit in
-                voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                Excepteur sint occaecat cupidatat non proident, sunt in culpa
-                qui officia deserunt mollit anim id est laborum.',
-    'foo' => 'bar',
+
+    'overview' => 'Overview',
+    'welcome' => 'Welcome',
+    'days' => 'd',
+    'error' => 'Error',
+    'success' => 'Success',
+    'orga-needed-fields' => 'Needed fields',
+    'needed-fields' => 'Needed fields',
+    'updated-at' => 'Updated',
+    'update' => 'Update',
+    'actions' => 'Actions',
+    'logout' => 'Logout',
+    'edit' => 'Editing',
+    'go' => 'Go',
+
+    'mon' => 'monday',
+    'tue' => 'tuesday',
+    'wed' => 'wednesday',
+    'thu' => 'thursday',
+    'fri' => 'friday',
+    'sat' => 'saturday',
+    'sun' => 'sunday',
+
+
+    '404-message' => 'Oops, this page could not be find !',
+    '404-back-home' => 'Back to home page',
+
+    '503-message' => 'IRISPASS is actually under maintenance',
+    '503-message-back' => 'All the team apologize for the inconvenience. The website will be back again soon',
+
+    '500-message-' => 'An error as occurred',
+    '500-message-back' => 'It will be fixed as soon as possible.',
 
 
 ];

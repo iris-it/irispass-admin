@@ -1,10 +1,9 @@
-<?php namespace App\Http\Requests;
+<?php namespace App\Http\Requests\Admin;
 
 use App\Http\Requests\Request;
 use Illuminate\Contracts\Auth\Guard;
-use Illuminate\Support\Facades\Auth;
 
-class GroupRequest extends Request
+class PermissionRoleRequest extends Request
 {
     /**
      * @var Guard
@@ -37,8 +36,9 @@ class GroupRequest extends Request
     public function rules()
     {
 
+
         $rules = [
-            'name' => 'required|max:255|unique:users_groups,name,' . $this->id,
+            'roles.*' => 'integer',
         ];
 
         return $rules;

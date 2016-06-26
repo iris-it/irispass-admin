@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use GuzzleHttp\Client;
-use Irisit\IrispassShared\Model\Organization;
 use Irisit\IrispassShared\Model\User;
 
 /**
@@ -148,7 +147,7 @@ class KeycloakService
         return $this;
     }
 
-    public function makeUserRepresentation(Organization $organization, User $user)
+    public function makeUserRepresentation($organization_id, User $user)
     {
 
         $user_representation = [
@@ -172,9 +171,9 @@ class KeycloakService
             $user_representation['email'] = $user->email;
         }
 
-        if ($organization->id) {
+        if ($organization_id) {
             $user_representation['attributes'] = [
-                'organization' => [strval($organization->id)],
+                'organization' => [strval($organization_id)],
                 'role' => ['user']
             ];
         }

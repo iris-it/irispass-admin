@@ -100,4 +100,49 @@ return [
     'groupaccesstab-no-user-no-group' => 'Pour gérer les accès, vous devez d\'abord créer au moins un groupe et un utilisateur.',
     'groupaccesstab-no-user' => 'Pour gérer les accès aux groupes, vous devez créer au moins un utilisateur.',
     'groupaccesstab-no-group' =>'Pour gérer les accès aux groupes, vous devez créer au moins un groupe.',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Admin
+    |--------------------------------------------------------------------------
+    */
+
+    'title' => 'Gestion des organisations',
+    'list' => 'Liste des organisations',
+    'show-title' => 'Voir une organisation',
+    'create-title' => 'Créer une organisation',
+    'edit-title' => 'Éditer une organisation',
+    'show-outlet-title' => 'Voir les billetteries de cette organisation',
+    'new-title' => 'Nouvelle organisation',
+    'params' => 'Configuration',
+
+
+    'table-name' => 'Nom',
+    'table-phone' => 'Tel',
+    'table-email' => 'Email',
+    'table-website' => 'Site web',
+    'table-owner' => 'Rep. Légal',
+    'table-status' => 'Statut',
+    'table-address' => 'Adresse',
+    'table-siret' => 'SIRET',
+    'table-ape' => 'APE',
+    'table-tva' => 'N° TVA Intra.',
+    'table-licence' => 'Nv Licence',
+    'users-count' => 'Membres',
+    'users-linked' => 'Membres (utilisateurs ayant accès à cette organisation)',
+
+    'create-action' => 'Créer une organisation',
+    'show-action' => 'Voir une organisation',
+    'edit-action' => 'Éditer une organisation',
+    'save-action' => 'Enregistrer mes changements',
+    'delete-action' => 'Supprimer une organisation',
+    'delete-action-warning' => 'Êtes vous sûr de vouloir supprimer cette organisation ?',
+    'back-action' => 'Revenir à la liste des organisations',
+
+    'not-exist' => 'Vous devez créer une organisation pour accéder aux fonctionnalités de l\'application',
+    'create-failed' => 'La création de l\'organisation a échoué',
+    'update-failed' => 'La mise à jour de l\'organisation a échoué',
+    'destroy-success' => 'Organisation supprimée',
+    'destroy-failed' => 'La suppression de l\'organisation a échoué',
+    
 ];

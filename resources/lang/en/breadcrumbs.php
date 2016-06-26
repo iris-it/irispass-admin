@@ -35,5 +35,12 @@ return [
     'edit-group'     => 'Group edition',
     'edit-user'     => 'User edition',
 
+    'data' => 'Data',
+    'users' => 'Users',
+    'roles' => 'Roles',
+    'permissions' => 'Permissions',
+    'organizations' => 'Organizations',
+    'licences' => 'Licences',
+
 
 ];

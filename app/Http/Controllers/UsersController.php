@@ -40,7 +40,7 @@ class UsersController extends Controller
         $user = User::create($data);
 
         $keycloakService->getToken()
-            ->makeUserRepresentation($this->organization, $user)
+            ->makeUserRepresentation($this->organization->id, $user)
             ->createUser()
             ->sendResetEmail();
 
@@ -121,7 +121,7 @@ class UsersController extends Controller
 
         $keycloakService->getToken()
             ->setUserId($user->sub)
-            ->makeUserRepresentation($this->organization, $user)
+            ->makeUserRepresentation($this->organization->id, $user)
             ->updateUser();
 
         if ($old_user->email != $user->email) {

@@ -4,26 +4,24 @@
 
         <div class="row">
             <div class="col-md-12">
-                <div class="block-flat">
-                    <h3>{{ trans('usersmanagement.groupaccesstab-index') }}</h3>
-                    <p>{{ trans('usersmanagement.groupaccesstab-description') }}</p>
-                </div>
+                <h3>{{ trans('usersmanagement.groupaccesstab-index') }}</h3>
+                <p>{{ trans('usersmanagement.groupaccesstab-description') }}</p>
             </div>
         </div>
 
         @foreach($groups->chunk(3) as $groups)
             <div class="row">
                 @foreach($groups as $group)
-                    <div class="col-md-4 col-lg-4">
-                        <div class="block block-color primary">
-                            <div class="header">
-                                <div class="actions">
-                                    <a class="minimize" href="#"><i class="fa fa-chevron-down"></i></a>
-                                </div>
-                                <h3>{{$group->name}}</h3>
-                            </div>
-                            <div class="content">
 
+                    <div class="col-md-4 col-lg-4">
+                        <div class="box box-primary box-access">
+                            <div class="box-header with-border">
+                                <h3 class="box-title"><i class="fa fa-folder"></i> {{$group->name}}</h3>
+                                <div class="box-tools pull-right">
+                                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+                                </div>
+                            </div>
+                            <div class="box-body">
                                 <div class="table-responsive">
                                     <table class="table no-border hover">
                                         <thead class="no-border">
@@ -39,11 +37,11 @@
                                                 <td>
                                                     @if($group->users->contains('id', $user->id))
                                                         {!! Form::open(['method' => 'POST','action' => ['UsersGroupsController@removeUserFromGroup', 'groupId' => $group->id,'userId' => $user->id]]) !!}
-                                                        <button class="btn btn-block btn-danger" name="submit-usergroup-disable" type="submit">{{trans('usersmanagement.groupaccesstab-disable')}}</button>
+                                                        <button class="btn btn-block btn-danger btn-flat" name="submit-usergroup-disable" type="submit">{{trans('usersmanagement.groupaccesstab-disable')}}</button>
                                                         {!! Form::close() !!}
                                                     @else
                                                         {!! Form::open(['method' => 'POST','action' => ['UsersGroupsController@addUserToGroup','groupId' => $group->id,'userId' => $user->id]]) !!}
-                                                        <button class="btn btn-block btn-primary" name="submit-usergroup-enable" type="submit">{{trans('usersmanagement.groupaccesstab-enable')}}</button>
+                                                        <button class="btn btn-block btn-primary btn-flat" name="submit-usergroup-enable" type="submit">{{trans('usersmanagement.groupaccesstab-enable')}}</button>
                                                         {!! Form::close() !!}
 
                                                     @endif
@@ -56,6 +54,7 @@
                             </div>
                         </div>
                     </div>
+
                 @endforeach
             </div>
         @endforeach
