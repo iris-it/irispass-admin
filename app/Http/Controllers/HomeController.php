@@ -3,23 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
-    private $organization;
-
-    /**
-     * Create a new controller instance.
-     *
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
-
-        $this->middleware('hasOrganization');
-
-        //$this->organization = Auth::user()->organization()->first();
-    }
 
     /**
      * Show the application dashboard.
@@ -28,12 +15,12 @@ class HomeController extends Controller
      */
     public function index()
     {
-        //$organization = $this->organization;
 
-        //$groups = $this->organization->groups()->get();
+        if ($this->organization) {
+            $groups = $this->organization->groups()->get();
+            $users = $this->organization->users()->get();
+        }
 
-        //$users = $this->organization->users()->get();
-
-        return view('pages.home.index');
+        return view('pages.home.index')->with(compact('organization', 'groups', 'users'));
     }
 }

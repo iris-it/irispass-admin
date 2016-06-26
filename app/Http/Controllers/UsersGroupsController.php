@@ -11,18 +11,6 @@ use Laracasts\Flash\Flash;
 class UsersGroupsController extends Controller
 {
 
-    private $organization;
-
-    public function __construct()
-    {
-        $this->middleware('auth');
-        
-        $this->middleware('hasOrganization');
-
-        $this->organization = Auth::user()->organization()->first();
-        
-    }
-
     /**
      * Add an user to a specified group
      * @param $userId

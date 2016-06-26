@@ -8,27 +8,12 @@ use App\Services\KeycloakService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
 use Irisit\IrispassShared\Model\User;
+use Irisit\IrispassShared\Model\UserProvider;
 use Irisit\IrispassShared\Services\OsjsService;
 use Laracasts\Flash\Flash;
 
 class UsersController extends Controller
 {
-
-    private $organization;
-
-    /**
-     * @internal param UserRepositoryInterface $userRepository
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
-
-        $this->middleware('hasOrganization');
-
-        $this->organization = Auth::user()->organization()->first();
-
-    }
-
 
     /**
      * Show the form for creating a new resource.
@@ -63,9 +48,19 @@ class UsersController extends Controller
 
         $user->save();
 
-        if ($path = $service->createDirectory('user', $user->sub)) {
+        $provider = UserProvider::create([
+            'user_id' => $user->id,
+            'provider_user_id' => $user->sub,
+            'provider' => 'keycloak',
+            'access_token' => ''
+        ]);
 
-            $user->path = $path;
+        $provider->user()->associate($user);
+
+        $provider->save();
+
+        if ($service->createDirectory('user', $user->sub)) {
+
             $user->organization()->associate($this->organization);
             $user->save();
 

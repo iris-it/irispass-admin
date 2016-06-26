@@ -166,6 +166,8 @@ return [
         Irisit\IrispassShared\IrispassSharedProvider::class,
         DaveJamesMiller\Breadcrumbs\ServiceProvider::class,
 
+        Barryvdh\Debugbar\ServiceProvider::class,
+
 
     ],
 
@@ -222,6 +224,8 @@ return [
         'Flash' => Laracasts\Flash\Flash::class,
         'Uuid' => Webpatser\Uuid\Uuid::class,
         'Breadcrumbs' => DaveJamesMiller\Breadcrumbs\Facade::class,
+
+        'Debugbar' => Barryvdh\Debugbar\Facade::class,
 
 
     ],

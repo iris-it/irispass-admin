@@ -5,19 +5,6 @@ use Illuminate\Support\Facades\Auth;
 
 class UsersManagementController extends Controller
 {
-
-    private $organization;
-
-    public function __construct()
-    {
-
-        $this->middleware('auth');
-
-        $this->middleware('hasOrganization');
-
-        $this->organization = Auth::user()->organization()->first();
-    }
-
     /**
      * Show the desktops
      *

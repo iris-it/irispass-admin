@@ -10,20 +10,7 @@ use Webpatser\Uuid\Uuid;
 
 class OrganizationController extends Controller
 {
-
-    private $organization;
-
-    public function __construct()
-    {
-
-        $this->middleware('auth');
-
-        $this->middleware('hasOrganization', ['except' => ['create', 'store']]);
-
-        $this->organization = Auth::user()->organization()->first();
-
-    }
-
+    
     /**
      * Show the profile of an user
      *
