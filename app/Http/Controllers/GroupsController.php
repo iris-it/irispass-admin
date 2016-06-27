@@ -37,7 +37,7 @@ class GroupsController extends Controller
 
         $group = UserGroup::create($request->all());
 
-        $name = $this->organization->uuid . "-" . $group->name;
+        $name = $this->organization->uuid . "#" . $group->name;
 
         if ($path = $service->createDirectory('group', $name)) {
 
@@ -104,7 +104,7 @@ class GroupsController extends Controller
         $group->save();
 
         //get the new version
-        $name = $this->organization->uuid . "-" . $group->name;
+        $name = $this->organization->uuid . "#" . $group->name;
 
         if ($path = $service->renameDirectory('group', $old_name, $name)) {
 
@@ -132,7 +132,7 @@ class GroupsController extends Controller
     {
         $group = UserGroup::findOrFail($id);
 
-        $name = $this->organization->uuid . "-" . $group->name;
+        $name = $this->organization->uuid . "#" . $group->name;
 
         if ($path = $service->deleteDirectory('group', $name)) {
 
