@@ -95,6 +95,14 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('manage/groups/{groupId}/remove/{userId}', array('uses' => 'UsersGroupsController@removeUserFromGroup'));
         });
 
+        
+        Route::group(['prefix' => 'website'], function () {
+            Route::get('/', array('uses' => 'WebsiteController@index'));
+            Route::get('create', array('uses' => 'WebsiteController@create'));
+            Route::post('create', array('uses' => 'WebsiteController@store'));
+            Route::delete('delete', array('uses' => 'WebsiteController@destroy'));
+        });
+
     });
 
     /*

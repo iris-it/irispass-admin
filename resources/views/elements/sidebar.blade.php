@@ -7,6 +7,8 @@
 
             <li><a href="{{ action('UsersManagementController@index') }}"><i class="fa fa-user"></i> <span>{{ trans('menu.usersmanagement') }}</span></a></li>
 
+            <li><a href="{{ action('WebsiteController@index') }}"><i class="fa fa-user"></i> <span>{{ trans('menu.cms') }}</span></a></li>
+
             @can('permission::access_flow_admin_section')
             @endcan
 
