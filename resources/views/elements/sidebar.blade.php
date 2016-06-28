@@ -9,9 +9,18 @@
 
             <li><a href="{{ action('WebsiteController@index') }}"><i class="fa fa-user"></i> <span>{{ trans('menu.cms') }}</span></a></li>
 
-            @can('permission::access_flow_admin_section')
-            @endcan
+            <li><a href="#"><i class="fa fa-suitcase"></i> <span>CRM</span></a></li>
 
+            <li><a href="#"><i class="fa fa-envelope"></i> <span>Mails</span></a></li>
+
+            <li><a href="#"><i class="fa fa-folder-open"></i> <span>Mes dossiers</span></a></li>
+
+            <li><a href="#"><i class="fa fa-slack"></i> <span>Chat</span></a></li>
+
+            <li><a href="#"><i class="fa fa-file-word-o"></i> <span>Bureautique</span></a></li>
+
+
+            @can('permission::access_flow_admin_section')
             <li class="header">{{ trans('menu.admin-role') }}</li>
 
             <li class="treeview"><a href="#">
@@ -36,7 +45,7 @@
                     </li>
                 </ul>
             </li>
-            {{--@endcan--}}
+            @endcan
 
 
         </ul>
