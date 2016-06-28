@@ -19,6 +19,10 @@ return [
     'phone-field' => 'Numéro de téléphone',
     'email-field' => 'Email',
     'website-field' => 'Site web',
+    'siren-field' => 'Numéro SIREN',
+    'siret-field' => 'Numéro SIRET',
+    'ape-field' => 'Numéro APE',
+    'tva-field' => 'Numéro de TVA intra-communautaire',
 
     'create' => 'Nouvelle organisation',
     'submit-create' => 'Enregistrer',
