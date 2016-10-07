@@ -68,7 +68,7 @@ class RoleController extends Controller
     {
         $role = Role::findOrFail($id);
 
-        $permissions = Permission::orderBy('name')->lists('name', 'id');
+        $permissions = Permission::orderBy('name')->pluck('name', 'id');
 
         return view('pages.admin.role.show')->with(compact('role', 'permissions'));
     }
@@ -84,7 +84,7 @@ class RoleController extends Controller
 
         $role = Role::findOrFail($id);
 
-        $permissions = Permission::orderBy('name')->lists('name', 'id');
+        $permissions = Permission::orderBy('name')->pluck('name', 'id');
 
         return view('pages.admin.role.edit')->with(compact('role', 'permissions'));
     }

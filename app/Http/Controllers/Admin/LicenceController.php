@@ -28,7 +28,7 @@ class LicenceController extends Controller
      */
     public function create()
     {
-        $organizations = Organization::orderBy('name')->lists('name', 'id');
+        $organizations = Organization::orderBy('name')->pluck('name', 'id');
 
         return view('pages.admin.licence.create')->with(compact('organizations'));
     }
@@ -74,7 +74,7 @@ class LicenceController extends Controller
     public function show($id)
     {
         $licence = Licence::findOrFail($id);
-        $organizations = Organization::orderBy('name')->lists('name', 'id');
+        $organizations = Organization::orderBy('name')->pluck('name', 'id');
 
         // Outlets
 
@@ -90,7 +90,7 @@ class LicenceController extends Controller
     public function edit($id)
     {
         $licence = Licence::findOrFail($id);
-        $organizations = Organization::orderBy('name')->lists('name', 'id');
+        $organizations = Organization::orderBy('name')->pluck('name', 'id');
 
         return view('pages.admin.licence.edit')->with(compact('licence', 'organizations'));
     }

@@ -29,6 +29,7 @@ class GroupsController extends Controller
      * Store a newly created resource in storage.
      *
      * @param GroupRequest $request
+     *
      * @param OsjsService $service
      * @return \Illuminate\Http\Response
      */
