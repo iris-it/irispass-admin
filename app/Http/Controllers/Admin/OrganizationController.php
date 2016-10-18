@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\OrganizationRequest;
+use App\Licence;
+use App\Organization;
+use App\User;
 use Illuminate\Support\Facades\Lang;
-use Irisit\IrispassShared\Model\Licence;
-use Irisit\IrispassShared\Model\Organization;
-use Irisit\IrispassShared\Model\User;
 use Laracasts\Flash\Flash;
 
 class OrganizationController extends Controller
@@ -24,13 +24,12 @@ class OrganizationController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return Response
      */
     public function create()
     {
-        $users = User::lists('preferred_username', 'id');
+        $users = User::pluck('preferred_username', 'id');
 
-        $licences = Licence::lists('name','id');
+        $licences = Licence::pluck('name','id');
 
         return view('pages.admin.organization.create')->with(compact('licences', 'users'));
     }
@@ -80,8 +79,6 @@ class OrganizationController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int $id
-     * @return Response
      */
     public function show($id)
     {
@@ -93,17 +90,15 @@ class OrganizationController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int $id
-     * @return Response
      */
     public function edit($id)
     {
         
         $organization = Organization::findOrFail($id);
 
-        $licences = Licence::lists('name','id');
+        $licences = Licence::pluck('name','id');
 
-        $users = User::lists('preferred_username', 'id');
+        $users = User::pluck('preferred_username', 'id');
 
 
         return view('pages.admin.organization.edit')->with(compact('organization', 'licences', 'users'));
@@ -114,8 +109,6 @@ class OrganizationController extends Controller
      * Update the specified resource in storage.
      *
      * @param OrganizationRequest $request
-     * @param  int $id
-     * @return Response
      */
     public function update(OrganizationRequest $request, $id)
     {

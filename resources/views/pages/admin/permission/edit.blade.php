@@ -10,7 +10,7 @@
             <div class="col-xs-12">
                 <div class="box">
 
-                    {!! Form::model($permission->toArray(), ['method' => 'PUT','action' => ['Admin\PermissionController@update', $permission->id], 'class'=> 'form-horizontal']) !!}
+                    {!! Form::model($permission, ['method' => 'PUT','action' => ['Admin\PermissionController@update', $permission->id], 'class'=> 'form-horizontal']) !!}
 
                     <div class="box-header">
                         <h3 class="box-title">{{trans('general.edit')}} {{$permission->name}}</h3>

@@ -21,30 +21,30 @@
 
 
             @can('permission::access_flow_admin_section')
-            <li class="header">{{ trans('menu.admin-role') }}</li>
+                <li class="header">{{ trans('menu.admin-role') }}</li>
 
-            <li class="treeview"><a href="#">
-                    <span>{{ trans('menu.admin-section') }}</span>
-                    <i class="fa fa-angle-left pull-right"></i>
-                </a>
-                <ul class="treeview-menu">
-                    <li>
-                        <a href="{{ action('Admin\UserController@index') }}">{{trans('menu.admin-users-link')}}</a>
-                    </li>
-                    <li>
-                        <a href="{{ action('Admin\OrganizationController@index') }}">{{trans('menu.admin-organizations-link')}}</a>
-                    </li>
-                    <li>
-                        <a href="{{ action('Admin\RoleController@index') }}">{{trans('menu.admin-roles-link')}}</a>
-                    </li>
-                    <li>
-                        <a href="{{ action('Admin\PermissionController@index') }}">{{trans('menu.admin-permissions-link')}}</a>
-                    </li>
-                    <li>
-                        <a href="{{ action('Admin\LicenceController@index') }}">{{trans('menu.admin-licences-link')}}</a>
-                    </li>
-                </ul>
-            </li>
+                <li class="treeview"><a href="#">
+                        <span>{{ trans('menu.admin-section') }}</span>
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li>
+                            <a href="{{ action('Admin\UserController@index') }}">{{trans('menu.admin-users-link')}}</a>
+                        </li>
+                        <li>
+                            <a href="{{ action('Admin\OrganizationController@index') }}">{{trans('menu.admin-organizations-link')}}</a>
+                        </li>
+                        <li>
+                            <a href="{{ action('Admin\RoleController@index') }}">{{trans('menu.admin-roles-link')}}</a>
+                        </li>
+                        <li>
+                            <a href="{{ action('Admin\PermissionController@index') }}">{{trans('menu.admin-permissions-link')}}</a>
+                        </li>
+                        <li>
+                            <a href="{{ action('Admin\LicenceController@index') }}">{{trans('menu.admin-licences-link')}}</a>
+                        </li>
+                    </ul>
+                </li>
             @endcan
 
 

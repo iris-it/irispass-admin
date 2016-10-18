@@ -19,7 +19,7 @@ class HasOrganization
     public function handle($request, Closure $next)
     {
 
-        $organization = Auth::user()->organization()->first();
+        $organization = $request->user()->organization()->first();
 
         if ($organization == null) {
             Flash::error(Lang::get('organization.fail-not-exist'));

@@ -3,15 +3,16 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests;
 use App\Http\Requests\Admin\UserRequest;
+use App\Http\Requests\Request;
+use App\Organization;
+use App\Role;
 use App\Services\KeycloakService;
+use App\Services\OsjsService;
+use App\User;
+use App\UserProvider;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
-use Irisit\IrispassShared\Model\Organization;
-use Irisit\IrispassShared\Model\Role;
-use Irisit\IrispassShared\Model\User;
-use Irisit\IrispassShared\Services\OsjsService;
 use Laracasts\Flash\Flash;
 
 class UserController extends Controller
@@ -20,7 +21,7 @@ class UserController extends Controller
     /**
      * Show the application dashboard.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index()
     {
@@ -31,12 +32,12 @@ class UserController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function create()
     {
-        $roles = Role::lists('name', 'id');
-        $organizations = Organization::lists('name', 'id');
+        $roles = Role::pluck('name', 'id');
+        $organizations = Organization::pluck('name', 'id');
         $organizations->prepend(trans('users.no-membership'), 0);
         return view('pages.admin.user.create')->with(compact('roles', 'organizations'));
     }
@@ -89,7 +90,7 @@ class UserController extends Controller
      * Display the specified resource.
      *
      * @param  int $id
-     * @return Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function show($id)
     {
@@ -102,14 +103,14 @@ class UserController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  int $id
-     * @return Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function edit($id)
     {
 
         $user = User::findOrFail($id);
-        $roles = Role::lists('name', 'id');
-        $organizations = Organization::lists('name', 'id');
+        $roles = Role::pluck('name', 'id');
+        $organizations = Organization::pluck('name', 'id');
         $organizations->prepend(trans('users.no-membership'), 0);
         return view('pages.admin.user.edit')->with(compact('user', 'roles', 'organizations'));
     }
@@ -164,11 +165,11 @@ class UserController extends Controller
      * @param KeycloakService $keycloakService
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id, OsjsService $service, KeycloakService $keycloakService)
+    public function destroy($id, Request $request, OsjsService $service, KeycloakService $keycloakService)
     {
         $user = User::findOrFail($id);
 
-        if ($user->id == Auth::user()->id) {
+        if ($user->id == $request->user()->id) {
             Flash::error(Lang::get('users.destroy-failed'));
             return redirect(action('Admin\UserController@index'));
         }
@@ -190,11 +191,11 @@ class UserController extends Controller
 
     }
 
-    public function switchOrganization($id)
+    public function switchOrganization($id, Request $request)
     {
-        $user = Auth::user();
+        $user = $request->user();
 
-        if (Auth::user()->role->name != "admin") {
+        if ($request->user()->role->name != "admin") {
             Flash::error(Lang::get('users.update-failed'));
             return redirect(action('Admin\OrganizationController@index'));
         }

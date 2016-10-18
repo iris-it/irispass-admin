@@ -1,14 +1,12 @@
 <?php namespace App\Http\Controllers;
 
-use App\Http\Requests;
-use Illuminate\Support\Facades\Auth;
 
 class UsersManagementController extends Controller
 {
     /**
      * Show the desktops
      *
-     * @return Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index()
     {

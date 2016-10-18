@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use AdamWathan\EloquentOAuth\Facades\OAuth;
-use App\Http\Requests;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 

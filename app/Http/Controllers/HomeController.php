@@ -2,16 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests;
-use Illuminate\Support\Facades\Auth;
+
+use Illuminate\Contracts\Auth\Guard;
 
 class HomeController extends Controller
 {
-
     /**
      * Show the application dashboard.
      *
-     * @return \Illuminate\Http\Response
      */
     public function index()
     {

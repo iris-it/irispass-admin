@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests;
+use App\Http\Requests\Request;
 use App\Http\Requests\UserRequest;
 use App\Services\KeycloakService;
+use App\Services\OsjsService;
+use App\User;
+use App\UserProvider;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
-use Irisit\IrispassShared\Model\User;
-use Irisit\IrispassShared\Model\UserProvider;
-use Irisit\IrispassShared\Services\OsjsService;
 use Laracasts\Flash\Flash;
 
 class UsersController extends Controller
@@ -77,7 +77,7 @@ class UsersController extends Controller
      * Display the specified resource.
      *
      * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function show($id)
     {
@@ -90,7 +90,7 @@ class UsersController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function edit($id)
     {
@@ -137,15 +137,16 @@ class UsersController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int $id
+     * @param Request $request
      * @param OsjsService $service
      * @param KeycloakService $keycloakService
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id, OsjsService $service, KeycloakService $keycloakService)
+    public function destroy($id, Request $request, OsjsService $service, KeycloakService $keycloakService)
     {
         $user = User::findOrFail($id);
 
-        if ($user->id == Auth::user()->id) {
+        if ($user->id == $request->user()->id) {
             Flash::error(Lang::get('users.destroy-failed'));
             return redirect(action('UsersManagementController@index') . '#orgausers');
         }

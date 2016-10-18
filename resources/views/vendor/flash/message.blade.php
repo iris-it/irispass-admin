@@ -6,10 +6,10 @@
             'body'       => session('flash_notification.message')
         ])
     @else
-        <div class="alert alert-{{ session('flash_notification.level') }}">
-            <button type="button" 
-                    class="close" 
-                    data-dismiss="alert" 
+        <div class="alert alert-{{ session('flash_notification.level') }} alert-dismissible" style="margin: 12px 0px -2px 0px">
+            <button type="button"
+                    class="close"
+                    data-dismiss="alert"
                     aria-hidden="true">&times;</button>
 
             {!! session('flash_notification.message') !!}

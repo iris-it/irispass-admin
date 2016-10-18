@@ -9,7 +9,7 @@
             <div class="col-xs-12">
                 <div class="box">
 
-                    {!! Form::model($role->toArray(), ['method' => 'PUT','action' => ['Admin\RoleController@update', $role->id], 'class'=> 'form-horizontal']) !!}
+                    {!! Form::model($role, ['method' => 'PUT','action' => ['Admin\RoleController@update', $role->id], 'class'=> 'form-horizontal']) !!}
 
                     <div class="box-header">
                         <h3 class="box-title">{{trans('general.edit')}} {{$role->name}}</h3>

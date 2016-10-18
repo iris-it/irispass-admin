@@ -8,7 +8,7 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="box">
-                    {!! Form::model($organization->toArray(), ['method' => 'PUT','action' => ['Admin\OrganizationController@update', $organization->id], 'class'=> 'form-horizontal']) !!}
+                    {!! Form::model($organization, ['method' => 'PUT','action' => ['Admin\OrganizationController@update', $organization->id], 'class'=> 'form-horizontal']) !!}
 
                     <div class="box-header">
                         <h3 class="box-title">{{trans('general.edit')}} {{$organization->name}}</h3>

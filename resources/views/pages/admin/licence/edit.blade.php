@@ -9,7 +9,7 @@
             <div class="col-xs-12">
                 <div class="box">
 
-                    {!! Form::model($licence->toArray(), ['method' => 'PUT','action' => ['Admin\LicenceController@update', $licence->id], 'class'=> 'form-horizontal']) !!}
+                    {!! Form::model($licence, ['method' => 'PUT','action' => ['Admin\LicenceController@update', $licence->id], 'class'=> 'form-horizontal']) !!}
 
                     <div class="box-header">
                         <h3 class="box-title">{{trans('general.edit')}} {{$licence->name}}</h3>

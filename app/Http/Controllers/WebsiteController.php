@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests;
 use App\Http\Requests\WebsiteRequest;
+use App\Organization;
+use App\Services\FlatCmService;
+use App\Website;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Lang;
-use Irisit\IrispassShared\Model\Organization;
-use Irisit\IrispassShared\Model\Website;
-use Irisit\IrispassShared\Services\FlatCmService;
 use Laracasts\Flash\Flash;
 
 class WebsiteController extends Controller
@@ -17,7 +16,7 @@ class WebsiteController extends Controller
     /**
      * Show the desktops
      *
-     * @return Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index()
     {
@@ -85,11 +84,11 @@ class WebsiteController extends Controller
     public function destroy(FlatCmService $service)
     {
         $identifier = str_slug($this->organization->name, "-");
-        
+
         if ($service->destroyCMS($identifier)) {
 
             $website = $this->organization->website()->get()->first();
-            
+
             $website->delete();
 
             Flash::success(Lang::get('website.destroy-success'));

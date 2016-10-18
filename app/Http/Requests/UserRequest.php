@@ -36,15 +36,24 @@ class UserRequest extends Request
      */
     public function rules()
     {
-        $id = $this->auth->user()->id;
-
-        $rules = [
-            'preferred_username' => 'required|max:255|unique:users,preferred_username,' . $id,
-            'family_name' => 'required|max:255',
-            'given_name' => 'required|max:255',
-            'email' => 'required|email|max:255|unique:users,email,' . $id,
-        ];
-
-        return $rules;
+        switch ($this->method()) {
+            case 'POST': {
+                return [
+                    'preferred_username' => 'required|max:255|unique:users,preferred_username',
+                    'family_name' => 'required|max:255',
+                    'given_name' => 'required|max:255',
+                    'email' => 'required|email|max:255|unique:users,email',
+                ];
+            }
+            case 'PATCH': {
+                $user = $this->auth->user();
+                return [
+                    'preferred_username' => 'required|max:255|unique:users,preferred_username,' . $user->id,
+                    'family_name' => 'required|max:255',
+                    'given_name' => 'required|max:255',
+                    'email' => 'required|email|max:255|unique:users,email,' . $user->id,
+                ];
+            }
+        }
     }
 }

@@ -3,14 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests;
 use App\Http\Requests\Admin\PermissionRequest;
 use App\Http\Requests\Admin\PermissionRoleRequest;
+use App\Permission;
+use App\Role;
 use Exception;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Lang;
-use Irisit\IrispassShared\Model\Permission;
-use Irisit\IrispassShared\Model\Role;
 use Laracasts\Flash\Flash;
 
 class PermissionController extends Controller
@@ -19,7 +18,6 @@ class PermissionController extends Controller
     /**
      * Show the application dashboard.
      *
-     * @return \Illuminate\Http\Response
      */
     public function index()
     {
@@ -59,8 +57,6 @@ class PermissionController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int $id
-     * @return Response
      */
     public function show($id)
     {
@@ -73,8 +69,6 @@ class PermissionController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int $id
-     * @return Response
      */
     public function edit($id)
     {
@@ -86,10 +80,9 @@ class PermissionController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
      * @param PermissionRequest $request
-     * @param  int $id
-     * @return Response
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function update(PermissionRequest $request, $id)
     {

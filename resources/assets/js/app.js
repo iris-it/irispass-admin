@@ -1,30 +1,22 @@
-var Vue = require('vue');
+/**
+ * First we will load all of this project's JavaScript dependencies which
+ * include Vue and Vue Resource. This gives a great starting point for
+ * building robust, powerful web applications using Vue and Laravel.
+ */
 
-import Login from './components/Auth/Login.vue';
-import Logout from './components/Auth/Logout.vue';
-import UserProfile from './components/Auth/UserProfile.vue';
+require('./bootstrap');
 
-new Vue({
-    el: '#app',
-    components: {Login, Logout, UserProfile}
-});
+/**
+ * Next, we will create a fresh Vue application instance and attach it to
+ * the body of the page. From here, you may begin adding components to
+ * the application, or feel free to tweak this setup for your needs.
+ */
 
-var IrisCrm = (function () {
+Vue.component('example', require('./components/Example.vue'));
+Vue.component('Login', require('./components/Auth/Login.vue'));
+Vue.component('Logout', require('./components/Auth/Logout.vue'));
+Vue.component('UserProfile', require('./components/Auth/UserProfile.vue'));
 
-    var initDualListBox = function (domId) {
-        var parameters = {
-            filterTextClear: "Tout montrer",
-            moveAllLabel: "Tout sélectionner",
-            filterPlaceHolder: "Tapez pour filtrer...",
-            moveSelectedLabel: "Sélectionner",
-            removeSelectedLabel: "Déselectionner",
-            removeAllLabel: "Tout déselectionner",
-            infoText: "Sélection : {0}",
-            infoTextFiltered: '<span class="label label-warning">Filtre actif</span> {0} sur {1}',
-            infoTextEmpty: "Liste vide"
-
-        };
-
-        $('#' + domId).bootstrapDualListbox(parameters);
-    }
+const app = new Vue({
+    el: '#app'
 });

@@ -3,14 +3,11 @@
 namespace App\Http\Controllers;
 
 
-use App\Http\Requests;
 use App\Http\Requests\GroupRequest;
-use Illuminate\Support\Facades\Auth;
+use App\Services\OsjsService;
+use App\UserGroup;
 use Illuminate\Support\Facades\Lang;
-use Irisit\IrispassShared\Model\UserGroup;
-use Irisit\IrispassShared\Services\OsjsService;
 use Laracasts\Flash\Flash;
-use Webpatser\Uuid\Uuid;
 
 class GroupsController extends Controller
 {
@@ -61,7 +58,7 @@ class GroupsController extends Controller
      * Display the specified resource.
      *
      * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function show($id)
     {
@@ -76,7 +73,7 @@ class GroupsController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function edit($id)
     {

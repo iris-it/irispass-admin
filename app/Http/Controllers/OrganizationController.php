@@ -1,20 +1,18 @@
 <?php namespace App\Http\Controllers;
 
-use App\Http\Requests;
 use App\Http\Requests\OrganizationRequest;
+use App\Organization;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
-use Irisit\IrispassShared\Model\Organization;
 use Laracasts\Flash\Flash;
 use Webpatser\Uuid\Uuid;
 
 class OrganizationController extends Controller
 {
-    
+
     /**
      * Show the profile of an user
      *
-     * @return Response
      */
     public function index()
     {
@@ -31,8 +29,7 @@ class OrganizationController extends Controller
 
     /**
      * Show the form for creating a new organization.
-     * @return Response
-     * @internal param Event $event
+     *
      */
     public function create()
     {
@@ -45,27 +42,27 @@ class OrganizationController extends Controller
     }
 
     /**
-     * Store a newly created carpooling in storage.
+     * Store a newly created organization in storage.
      *
      * @param OrganizationRequest $request
-     * @return Response
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function store(OrganizationRequest $request)
     {
 
-        $user = Auth::user();
+        $data = $request->all();
+
+        $user = $request->user();
+
+        $data['owner_id'] = $user->id;
 
         if ($this->filterName($request->get('name'))) {
             Flash::error(Lang::get('organization.fail-name'));
             return redirect(action('OrganizationController@create'));
         }
 
-        $this->organization = Organization::create($request->all());
-
+        $this->organization = Organization::create($data);
         $this->organization->uuid = Uuid::generate(4)->string;
-
-        $this->organization->owner()->associate($user);
-
         $this->organization->save();
 
         $user->organization()->associate($this->organization);
@@ -74,13 +71,12 @@ class OrganizationController extends Controller
 
         Flash::success(Lang::get('organization.create-success'));
 
-        return redirect(action('OrganizationController@index'));
+        return redirect()->action('HomeController@index');
     }
 
     /**
      * Show the form for editing the profile of the authenticated user
      *
-     * @return Response
      */
     public function edit()
     {
@@ -90,8 +86,8 @@ class OrganizationController extends Controller
     /**
      * Update the profile of the authenticated user
      *
-     * @param OrganizationRequest|UserProfileRequest $request
-     * @return Response
+     * @param OrganizationRequest $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function update(OrganizationRequest $request)
     {

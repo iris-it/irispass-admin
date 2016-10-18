@@ -16,18 +16,18 @@ class CreateOrganizationsTable extends Migration
 
         Schema::create('organizations', function (Blueprint $table) {
             $table->increments('id');
-            $table->uuid('uuid');
+            $table->uuid('uuid')->nullable();
             $table->string('name')->nullable();
             $table->string('address')->nullable();
             $table->string('address_comp')->nullable();
             $table->string('phone')->nullable();
             $table->string('email')->nullable();
             $table->string('website')->nullable();
-            $table->string('status');
+            $table->string('status')->nullable();
             $table->string('siren_number')->nullable();
             $table->string('siret_number')->unique();
             $table->string('tva_number')->nullable();
-            $table->string('ape_number');
+            $table->string('ape_number')->nullable();
             $table->boolean('is_active')->default(false);
             $table->timestamps();
         });

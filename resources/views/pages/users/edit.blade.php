@@ -12,7 +12,7 @@
             <div class="box-body">
                 @include('errors.list')
 
-                {!! Form::model($user->toArray(), ['method' => 'PATCH','action' => ['UsersController@update', $user->id]]) !!}
+                {!! Form::model($user, ['method' => 'PATCH','action' => ['UsersController@update', $user->id]]) !!}
 
                 @include('pages.users.partials.form')
 

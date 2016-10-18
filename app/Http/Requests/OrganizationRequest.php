@@ -1,6 +1,7 @@
 <?php namespace App\Http\Requests;
 
 use Illuminate\Contracts\Auth\Guard;
+use Illuminate\Validation\Rule;
 
 class OrganizationRequest extends Request
 {
@@ -35,20 +36,38 @@ class OrganizationRequest extends Request
     public function rules()
     {
 
-        $rules = [
-            'name' => 'required|max:255',
-            'address' => 'required|max:255',
-            'address_comp' => 'max:255',
-            'phone' => 'required|min:10',
-            'email' => 'email|max:255',
-            'website' => 'max:500',
-            'status' => 'required|string|max:255',
-            'siren_number' => array("regex:/^[0-9]{3}[ \.\-]?[0-9]{3}[ \.\-]?[0-9]{3}$/im", 'unique:organizations,siren_number,' . $this->id,),
-            'siret_number' => array('required', "regex:/^[0-9]{3}[ \.\-]?[0-9]{3}[ \.\-]?[0-9]{3}[ \.\-]?[0-9]{5}$/im", 'unique:organizations,siret_number,' . $this->id,),
-            'ape_number' => array('required', "regex:/(^[0-9]{1,2}\.[0-9]{1,2}[A-Z]$|^[0-9]{1,2}\.[0-9]{1,2})$/im"),
-            'tva_number' => array('required', "regex:/^[A-Z]{2}[ \.\-]?[0-9]{2}[ \.\-]?[0-9]{3}[ \.\-]?[0-9]{3}[ \.\-]?[0-9]{3}$/im"),
-        ];
-
-        return $rules;
+        switch ($this->method()) {
+            case 'POST': {
+                return [
+                    'name' => 'required|max:255',
+                    'address' => 'required|max:255',
+                    'address_comp' => 'max:255',
+                    'phone' => 'required|min:10',
+                    'email' => 'email|max:255',
+                    'website' => 'max:500',
+                    'status' => 'required|string|max:255',
+                    'siren_number' => array("regex:/^[0-9]{3}[ \.\-]?[0-9]{3}[ \.\-]?[0-9]{3}$/im"),
+                    'siret_number' => array('required', "regex:/^[0-9]{3}[ \.\-]?[0-9]{3}[ \.\-]?[0-9]{3}[ \.\-]?[0-9]{5}$/im"),
+                    'ape_number' => array('required', "regex:/(^[0-9]{1,2}\.[0-9]{1,2}[A-Z]$|^[0-9]{1,2}\.[0-9]{1,2})$/im"),
+                    'tva_number' => array('required', "regex:/^[A-Z]{2}[ \.\-]?[0-9]{2}[ \.\-]?[0-9]{3}[ \.\-]?[0-9]{3}[ \.\-]?[0-9]{3}$/im"),
+                ];
+            }
+            case 'PATCH': {
+                $organization = $this->user()->organization;
+                return [
+                    'name' => 'required|max:255',
+                    'address' => 'required|max:255',
+                    'address_comp' => 'max:255',
+                    'phone' => 'required|min:10',
+                    'email' => 'email|max:255',
+                    'website' => 'max:500',
+                    'status' => 'required|string|max:255',
+                    'siren_number' => array("regex:/^[0-9]{3}[ \.\-]?[0-9]{3}[ \.\-]?[0-9]{3}$/im", Rule::unique('organizations')->ignore($organization->id, 'siren_number')),
+                    'siret_number' => array('required', "regex:/^[0-9]{3}[ \.\-]?[0-9]{3}[ \.\-]?[0-9]{3}[ \.\-]?[0-9]{5}$/im", Rule::unique('organizations')->ignore($organization->id, 'siret_number')),
+                    'ape_number' => array('required', "regex:/(^[0-9]{1,2}\.[0-9]{1,2}[A-Z]$|^[0-9]{1,2}\.[0-9]{1,2})$/im"),
+                    'tva_number' => array('required', "regex:/^[A-Z]{2}[ \.\-]?[0-9]{2}[ \.\-]?[0-9]{3}[ \.\-]?[0-9]{3}[ \.\-]?[0-9]{3}$/im"),
+                ];
+            }
+        }
     }
 }

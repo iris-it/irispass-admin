@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests;
-use Illuminate\Support\Facades\Auth;
+use App\UserGroup;
 use Illuminate\Support\Facades\Lang;
-use Irisit\IrispassShared\Model\UserGroup;
 use Laracasts\Flash\Flash;
 
 class UsersGroupsController extends Controller
@@ -21,6 +19,7 @@ class UsersGroupsController extends Controller
     {
 
         $group = UserGroup::find($groupId);
+
         $group->users()->attach($userId);
 
         Flash::success(Lang::get('users_groups.update-success'));

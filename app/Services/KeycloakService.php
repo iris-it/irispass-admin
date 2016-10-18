@@ -2,9 +2,8 @@
 
 namespace App\Services;
 
+use App\User;
 use GuzzleHttp\Client;
-use Irisit\IrispassShared\Model\User;
-
 /**
  * Created by PhpStorm.
  * User: alexa

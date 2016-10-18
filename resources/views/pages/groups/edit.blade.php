@@ -13,7 +13,7 @@
 
                 @include('errors.list')
 
-                {!! Form::model($group->toArray(), ['method' => 'PATCH','action' => ['GroupsController@update', $group->id]]) !!}
+                {!! Form::model($group, ['method' => 'PATCH','action' => ['GroupsController@update', $group->id]]) !!}
 
                 @include('pages.groups.partials.form')
 
