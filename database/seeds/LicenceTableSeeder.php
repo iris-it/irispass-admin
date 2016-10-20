@@ -14,6 +14,8 @@ class LicenceTableSeeder extends Seeder
     public function run()
     {
         DB::table('licences')->delete();
+        $statement = "ALTER TABLE licences AUTO_INCREMENT = 1;";
+        DB::unprepared($statement);
 
         Licence::create([
             'identifier' => 'trial',
