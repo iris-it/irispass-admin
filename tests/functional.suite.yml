@@ -10,6 +10,4 @@ modules:
         - Db
         - Laravel5:
             environment_file: .env.testing
-            run_database_migrations: false
-            cleanup: true
         - \Helper\Functional

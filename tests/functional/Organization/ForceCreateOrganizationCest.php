@@ -8,7 +8,7 @@ class ForceCreateOrganizationCest
 {
     public function _before(FunctionalTester $I)
     {
-        $I->callArtisan('db:seed');
+
     }
 
     public function _after(FunctionalTester $I)
@@ -19,7 +19,7 @@ class ForceCreateOrganizationCest
     // tests
     public function tryToTest(FunctionalTester $I)
     {
-        $I->am('a user');
+        $I->am('a manager');
         $I->wantTo('see if i am forced to create an organization');
 
         $I->amLoggedAs(User::find(2));

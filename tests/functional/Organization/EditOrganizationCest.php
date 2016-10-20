@@ -4,7 +4,7 @@ namespace Auth;
 use App\User;
 use \FunctionalTester;
 
-class CreateOrganizationCest
+class EditOrganizationCest
 {
     public function _before(FunctionalTester $I)
     {
@@ -20,16 +20,16 @@ class CreateOrganizationCest
     public function tryToTest(FunctionalTester $I)
     {
         $I->am('a manager');
-        $I->wantTo('Create an organization');
+        $I->wantTo('Edit an organization');
 
-        $I->amLoggedAs(User::find(2));
+        $I->amLoggedAs(User::find(1));
 
         $I->amOnAction('HomeController@index');
-        $I->canSee('Mike Doe');
+        $I->canSee('John Doe');
         $I->canSeeAuthentication();
 
-        $I->amOnAction('OrganizationController@create');
-        $I->canSee('New organization');
+        $I->amOnAction('OrganizationController@edit');
+        $I->canSee('Settings');
 
         $I->fillField(['name' => 'name'], 'Gorilla LTD');
         $I->fillField(['name' => 'address'], '4 street');
@@ -46,7 +46,8 @@ class CreateOrganizationCest
         $I->click('submit-organization-create');
 
         //verify
-        $I->seeCurrentActionIs('HomeController@index');
+        $I->seeCurrentActionIs('OrganizationController@index');
+        $I->canSee('Organization updated');
 
         //assert
         $I->seeRecord('organizations', [
@@ -61,6 +62,7 @@ class CreateOrganizationCest
             'siret_number' => '00100200400556',
             'ape_number' => '42.42',
             'tva_number' => 'FR00001004040',
+            'owner_id' => 1
         ]);
 
     }

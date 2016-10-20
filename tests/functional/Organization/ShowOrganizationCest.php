@@ -4,7 +4,7 @@ namespace Auth;
 use App\User;
 use \FunctionalTester;
 
-class HomePageCest
+class ShowOrganizationCest
 {
     public function _before(FunctionalTester $I)
     {
@@ -19,13 +19,20 @@ class HomePageCest
     // tests
     public function tryToTest(FunctionalTester $I)
     {
-        $I->am('a user');
-        $I->wantTo('see if the auth works');
+        $I->am('a manager');
+        $I->wantTo('See organization info');
 
         $I->amLoggedAs(User::find(1));
 
-        $I->amOnPage('/');
+        $I->amOnAction('OrganizationController@index');
         $I->canSee('John Doe');
         $I->canSeeAuthentication();
+
+        $I->canSee('Acme LTD');
+        $I->canSee('4 duck street');
+        $I->canSee('acme.corp@mail.fr');
+        $I->canSee('+33564381765');
+        $I->canSee('www.acme.com');
+
     }
 }

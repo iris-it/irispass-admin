@@ -1,0 +1,24 @@
+language: php
+
+php:
+  - 5.6
+  - 7.0
+
+services:
+  - mysql
+  - redis-server
+
+before_script:
+  - cp .env.testing .env
+  - echo '' > storage/testing.sqlite
+  - composer self-update
+  - composer install  --prefer-dist --no-interaction --dev
+  - php artisan migrate:install --database=sqlite_testing --no-interaction -vvv
+
+script:
+  - php artisan migrate --database=sqlite_testing --no-interaction -vvv
+  - php artisan db:seed --database=sqlite_testing --no-interaction -vvv
+  - vendor/bin/codecept run
+
+notifications:
+    slack: 'tawa:4lqJwQnUZQ48Y1IimLcdrRj6#tawacovoiturage'

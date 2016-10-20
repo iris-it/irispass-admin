@@ -7,7 +7,7 @@ class RootPageCest
 {
     public function _before(FunctionalTester $I)
     {
-        $I->callArtisan('db:seed');
+
     }
 
     public function _after(FunctionalTester $I)
@@ -20,7 +20,10 @@ class RootPageCest
     {
         $I->am('a user');
         $I->wantTo('see if the application works');
-        $I->amOnAction('AuthController@login');
+
+        $I->amOnAction('HomeController@index');
+        $I->seeCurrentActionIs('AuthController@login');
+
         $I->cantSeeAuthentication();
 
         $I->canSee('Iris');
