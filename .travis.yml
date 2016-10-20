@@ -17,6 +17,7 @@ before_install:
 install:
   - cp .env.travis .env
   - composer self-update
+  - nvm install node
   - npm install -g yarn gulp
   - mysql -u root -e 'create database `irispass-admin-testing`;'
 
