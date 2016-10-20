@@ -15,11 +15,11 @@ install:
   - cp .env.travis .env
   - composer self-update
   - npm install -g yarn gulp
-  - yarn
-  - gulp
+  - mysql -e 'create database irispass-admin-testing;'
 
 before_script:
-  - mysql -e 'create database irispass-admin-testing;'
+  - yarn
+  - gulp
   - composer install  --prefer-dist --no-interaction --dev
 
 script:
