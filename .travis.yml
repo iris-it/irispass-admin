@@ -4,6 +4,9 @@ php:
   - 5.6
   - 7.0
 
+env:
+  - TRAVIS_NODE_VERSION="6"
+
 services:
   - mysql
   - redis-server
@@ -14,11 +17,11 @@ before_install:
 install:
   - cp .env.travis .env
   - composer self-update
-  - npm install -g gulp
+  - npm install -g yarn gulp
   - mysql -u root -e 'create database `irispass-admin-testing`;'
 
 before_script:
-  - npm install
+  - yarn
   - gulp
   - composer install  --prefer-dist --no-interaction --dev
 
