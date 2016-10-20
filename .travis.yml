@@ -1,5 +1,31 @@
 language: php
 
+env:
+  - APP_ENV=testing
+  - APP_KEY=base64:QEJ2KnKRC03NLEv8V2oC+scr8NVjac6JbBmPMiKOb/g=
+  - APP_DEBUG=true
+  - APP_LOG_LEVEL=debug
+  - APP_URL=http://localhost
+  - DB_CONNECTION=mysql
+  - DB_HOST=127.0.0.1
+  - DB_PORT=3306
+  - DB_DATABASE=irispass-admin-testing
+  - DB_USERNAME=root
+  - DB_PASSWORD=
+  - BROADCAST_DRIVER=redis
+  - CACHE_DRIVER=redis
+  - SESSION_DRIVER=redis
+  - QUEUE_DRIVER=redis
+  - REDIS_HOST=127.0.0.1
+  - REDIS_PASSWORD=null
+  - REDIS_PORT=6379
+  - OSJS_DISK=osjs
+  - OSJS_VFS_PATH=/var/www/vfs
+  - CMS_MASTER_PATH=/var/www/irispass-cms/latest
+  - CMS_PATH=/var/www/cms_container
+  - USER_PRIMARY_KEY=id
+  - ENABLE_APP_PERMISSIONS=true
+
 php:
   - 5.6
   - 7.0
@@ -9,16 +35,12 @@ services:
   - redis-server
 
 before_script:
-  - cp .env.testing .env
-  - echo '' > storage/testing.sqlite
+  - mysql -e 'create database irispass-admin-testing;'
   - composer self-update
   - composer install  --prefer-dist --no-interaction --dev
-  - php artisan migrate:install --database=sqlite_testing --no-interaction -vvv
 
 script:
-  - php artisan migrate --database=sqlite_testing --no-interaction -vvv
-  - php artisan db:seed --database=sqlite_testing --no-interaction -vvv
   - vendor/bin/codecept run
 
 notifications:
-    slack: 'tawa:4lqJwQnUZQ48Y1IimLcdrRj6#tawacovoiturage'
+    slack: 'n64:rMScyWuafH7BrnxKjSiPCfQM#irispass'
