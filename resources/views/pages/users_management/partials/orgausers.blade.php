@@ -22,16 +22,18 @@
                     <td>{{$user->family_name}}</td>
                     <td>{{$user->created_at->diffForHumans()}}</td>
                     <td>{{$user->updated_at->diffForHumans()}}</td>
-                    <td><a class="btn btn-primary btn-flat" href="{{action('UsersController@show',['id' => $user->id])}}">{{trans('usersmanagement.userstab-show-button')}}</a></td>
+                    <td><a class="btn btn-primary btn-flat"
+                           href="{{action('UsersController@show',['id' => $user->id])}}">{{trans('usersmanagement.userstab-show-button')}}</a>
+                    </td>
                     <td>
                         @if($user->id != Auth::user()->id)
-                            <a class="btn btn-danger btn-flat"
-                               href="{{action('UsersController@destroy',['id' => $user->id])}}"
-                               data-method="DELETE"
-                               data-token="{{csrf_token()}}"
-                               data-confirm="{{trans('usersmanagement.userstab-destroy-confirmation')}}">
-                                {{trans('usersmanagement.userstab-destroy-button')}}
-                            </a>
+
+                            {!! Form::open(['method' => 'DELETE','action' => ['UsersController@destroy', $user->id]]) !!}
+
+                            {!! Form::submit(trans('usersmanagement.userstab-destroy-button'), ['class' => 'btn btn-danger btn-flat', 'name' => 'submit-users-delete', 'onclick' => 'if(!confirm(\''.trans('usersmanagement.userstab-destroy-confirmation').'\')){return false;}']) !!}
+
+                            {!! Form::close() !!}
+
                         @endif
                     </td>
                 </tr>
@@ -42,7 +44,9 @@
         </table>
     @else
 
-        <p>{{ trans('usersmanagement.userstab-no-user') }} {{$organization->name}}. <a class="btn btn-success btn-flat pull-right" href="{{action('UsersController@create')}}">{{ trans('users.create')}}</a></p>
+        <p>{{ trans('usersmanagement.userstab-no-user') }} {{$organization->name}}. <a
+                    class="btn btn-success btn-flat pull-right"
+                    href="{{action('UsersController@create')}}">{{ trans('users.create')}}</a></p>
 
     @endif
 

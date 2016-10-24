@@ -25,13 +25,13 @@
                     <td>{{$group->updated_at->diffForHumans()}}</td>
                     <td><a class="btn btn-primary btn-flat" href="{{action('GroupsController@show',['id' => $group->id])}}">{{trans('usersmanagement.groupstab-show-button')}}</a></td>
                     <td>
-                        <a class="btn btn-danger btn-flat"
-                           href="{{action('GroupsController@destroy',['id' => $group->id])}}"
-                           data-method="DELETE"
-                           data-token="{{csrf_token()}}"
-                           data-confirm="{{trans('usersmanagement.groupstab-destroy-confirmation')}}">
-                            {{trans('usersmanagement.groupstab-destroy-button')}}
-                        </a>
+
+                        {!! Form::open(['method' => 'DELETE','action' => ['GroupsController@destroy', $group->id]]) !!}
+
+                        {!! Form::submit(trans('usersmanagement.groupstab-destroy-button'), ['class' => 'btn btn-danger btn-flat', 'name' => 'submit-group-delete', 'onclick' => 'if(!confirm(\''.trans('usersmanagement.groupstab-destroy-confirmation').'\')){return false;}']) !!}
+
+                        {!! Form::close() !!}
+
                     </td>
                 </tr>
 

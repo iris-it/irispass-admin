@@ -2,14 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Request;
 use App\Http\Requests\UserRequest;
-use App\Services\KeycloakService;
-use App\Services\OsjsService;
+use App\Services\UserService;
 use App\User;
-use App\UserProvider;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Lang;
 use Laracasts\Flash\Flash;
 
@@ -30,49 +26,18 @@ class UsersController extends Controller
      * Store a newly created resource in storage.
      *
      * @param UserRequest $request
-     * @param KeycloakService $keycloakService
-     * @param OsjsService $service
+     * @param UserService $userService
      * @return \Illuminate\Http\Response
+     * @internal param KeycloakService $keycloakService
+     * @internal param OsjsService $service
      */
-    public function store(UserRequest $request, KeycloakService $keycloakService, OsjsService $service)
+    public function store(UserRequest $request, UserService $userService)
     {
-        DB::beginTransaction();
 
-        $data = $request->all();
-
-        $user = User::create($data);
-
-        $keycloakService->getToken()
-            ->makeUserRepresentation($this->organization->id, $user)
-            ->createUser()
-            ->sendResetEmail();
-
-        $user->sub = $keycloakService->getUserId();
-
-        $user->save();
-
-        $provider = UserProvider::create([
-            'user_id' => $user->id,
-            'provider_user_id' => $user->sub,
-            'provider' => 'keycloak',
-            'access_token' => ''
-        ]);
-
-        $provider->user()->associate($user);
-
-        $provider->save();
-
-        if ($service->createDirectory('user', $user->sub)) {
-
-            $user->organization()->associate($this->organization);
-            $user->save();
-
-            DB::commit();
-
+        if ($userService->createUser($request, $this->organization)) {
             Flash::success(Lang::get('users.create-success'));
             return redirect(action('UsersManagementController@index') . '#orgausers');
         } else {
-
             Flash::error(Lang::get('users.create-failed'));
             return redirect(action('UsersController@create'));
         }
@@ -110,29 +75,14 @@ class UsersController extends Controller
      *
      * @param UserRequest $request
      * @param  int $id
-     * @param KeycloakService $keycloakService
+     * @param UserService $userService
      * @return \Illuminate\Http\Response
+     * @internal param KeycloakService $keycloakService
      */
-    public function update(UserRequest $request, $id, KeycloakService $keycloakService)
+    public function update(UserRequest $request, $id, UserService $userService)
     {
-        $old_user = User::findOrFail($id);
 
-        $user = User::findOrFail($id);
-
-        $data = $request->all();
-
-        $user->update($data);
-
-        $user->save();
-
-        $keycloakService->getToken()
-            ->setUserId($user->sub)
-            ->makeUserRepresentation($this->organization->id, $user)
-            ->updateUser();
-
-        if ($old_user->email != $user->email) {
-            $keycloakService->sendResetEmail();
-        }
+        $userService->updateUser($id, $request, $this->organization);
 
         Flash::success(Lang::get('users.update-success'));
 
@@ -144,27 +94,15 @@ class UsersController extends Controller
      *
      * @param  int $id
      * @param Request $request
-     * @param OsjsService $service
-     * @param KeycloakService $keycloakService
+     * @param UserService $userService
      * @return \Illuminate\Http\Response
+     * @internal param OsjsService $service
+     * @internal param KeycloakService $keycloakService
      */
-    public function destroy($id, Request $request, OsjsService $service, KeycloakService $keycloakService)
+    public function destroy($id, Request $request, UserService $userService)
     {
-        $user = User::findOrFail($id);
 
-        if ($user->id == $request->user()->id) {
-            Flash::error(Lang::get('users.destroy-failed'));
-            return redirect(action('UsersManagementController@index') . '#orgausers');
-        }
-
-        if ($path = $service->deleteDirectory('user', $user->sub)) {
-
-            $keycloakService->getToken()
-                ->setUserId($user->sub)
-                ->deleteUser();
-
-            $user->delete();
-
+        if ($userService->deleteUser($id, $request)) {
             Flash::success(Lang::get('users.destroy-success'));
         } else {
             Flash::error(Lang::get('users.destroy-failed'));

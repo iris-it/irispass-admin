@@ -18,6 +18,7 @@ class TestingDatabaseSeeder extends Seeder
         $this->call(UserTableSeeder::class);
         $this->call(UserProviderTableSeeder::class);
         $this->call(OrganizationTableSeeder::class);
+        $this->call(GroupTableSeeder::class);
 
     }
 }

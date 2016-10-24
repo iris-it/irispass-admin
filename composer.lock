@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "cdb1c898afe691f41e2696d9285f6b59",
-    "content-hash": "7d8e28fb59ebb1df7550e533b45c3b7a",
+    "hash": "98d1e674a118535bd689a2b0a8a2bc8b",
+    "content-hash": "244a268c571891190dc9310d92923b2d",
     "packages": [
         {
             "name": "adamwathan/eloquent-oauth",
@@ -3129,16 +3129,16 @@
         },
         {
             "name": "codeception/codeception",
-            "version": "2.2.5",
+            "version": "2.2.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Codeception/Codeception.git",
-                "reference": "b4729341e469d0f174f3cade85718ff5bf8dd751"
+                "reference": "3a3fad3845900b19c302d815f9bef077f225e593"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/b4729341e469d0f174f3cade85718ff5bf8dd751",
-                "reference": "b4729341e469d0f174f3cade85718ff5bf8dd751",
+                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/3a3fad3845900b19c302d815f9bef077f225e593",
+                "reference": "3a3fad3845900b19c302d815f9bef077f225e593",
                 "shasum": ""
             },
             "require": {
@@ -3216,7 +3216,7 @@
                 "functional testing",
                 "unit testing"
             ],
-            "time": "2016-09-29 01:29:59"
+            "time": "2016-10-24 10:21:59"
         },
         {
             "name": "doctrine/instantiator",
@@ -4893,7 +4893,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "codeception/codeception": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
