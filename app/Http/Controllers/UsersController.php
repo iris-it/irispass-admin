@@ -9,6 +9,7 @@ use App\Services\OsjsService;
 use App\User;
 use App\UserProvider;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Lang;
 use Laracasts\Flash\Flash;
 
@@ -35,6 +36,8 @@ class UsersController extends Controller
      */
     public function store(UserRequest $request, KeycloakService $keycloakService, OsjsService $service)
     {
+        DB::beginTransaction();
+
         $data = $request->all();
 
         $user = User::create($data);
@@ -64,9 +67,12 @@ class UsersController extends Controller
             $user->organization()->associate($this->organization);
             $user->save();
 
+            DB::commit();
+
             Flash::success(Lang::get('users.create-success'));
             return redirect(action('UsersManagementController@index') . '#orgausers');
         } else {
+
             Flash::error(Lang::get('users.create-failed'));
             return redirect(action('UsersController@create'));
         }

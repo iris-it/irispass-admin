@@ -4,6 +4,8 @@ namespace App\Services;
 
 use App\User;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
+
 /**
  * Created by PhpStorm.
  * User: alexa
