@@ -3,7 +3,7 @@
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Schema;
 
-class DatabaseSeeder extends Seeder
+class TestingDatabaseSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -12,7 +12,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+
         $this->call(RoleTableSeeder::class);
         $this->call(LicenceTableSeeder::class);
+        $this->call(UserTableSeeder::class);
+        $this->call(UserProviderTableSeeder::class);
+        $this->call(OrganizationTableSeeder::class);
+
     }
 }

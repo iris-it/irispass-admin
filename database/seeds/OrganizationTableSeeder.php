@@ -3,6 +3,7 @@
 use App\Organization;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class OrganizationTableSeeder extends Seeder
 {
@@ -16,6 +17,7 @@ class OrganizationTableSeeder extends Seeder
         DB::table('organizations')->delete();
         $statement = "ALTER TABLE organizations AUTO_INCREMENT = 1;";
         DB::unprepared($statement);
+        Schema::disableForeignKeyConstraints();
 
         Organization::create([
             'uuid' => '084bfedb-4aba-481c-b01f-8f3f822298c1',

@@ -87,12 +87,8 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('groups/{id}/edit', array('uses' => 'GroupsController@edit'));
             Route::patch('groups/{id}/edit', array('uses' => 'GroupsController@update'));
             Route::delete('groups/{id}', array('uses' => 'GroupsController@destroy'));
-
-            /*
-             * User Group association
-             */
-            Route::post('manage/groups/{groupId}/add/{userId}', array('uses' => 'UsersGroupsController@addUserToGroup'));
-            Route::post('manage/groups/{groupId}/remove/{userId}', array('uses' => 'UsersGroupsController@removeUserFromGroup'));
+            Route::post('manage/groups/{groupId}/add/{userId}', array('uses' => 'GroupsController@addUserToGroup'));
+            Route::post('manage/groups/{groupId}/remove/{userId}', array('uses' => 'GroupsController@removeUserFromGroup'));
         });
 
 

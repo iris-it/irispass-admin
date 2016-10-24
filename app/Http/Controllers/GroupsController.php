@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\GroupRequest;
 use App\Services\OsjsService;
-use App\UserGroup;
+use App\Group;
 use Illuminate\Support\Facades\Lang;
 use Laracasts\Flash\Flash;
 
@@ -26,25 +26,21 @@ class GroupsController extends Controller
      * Store a newly created resource in storage.
      *
      * @param GroupRequest $request
-     *
-     * @param OsjsService $service
      * @return \Illuminate\Http\Response
+     * @internal param OsjsService $service
      */
-    public function store(GroupRequest $request, OsjsService $service)
+    public function store(GroupRequest $request)
     {
 
-        $group = UserGroup::create($request->all());
+        $group = Group::create($request->all());
 
-        $name = $this->organization->uuid . "#" . $group->name;
+        $group->organization_uuid = $this->organization->uuid;
 
-        if ($path = $service->createDirectory('group', $name)) {
+        $group->realname = $this->organization->uuid . "#" . $group->name;
 
-            $group->organization_uuid = $this->organization->uuid;
-            $group->realname = $name;
-            $group->path = $path;
-            $group->organization()->associate($this->organization);
-            $group->save();
+        $group->organization()->associate($this->organization);
 
+        if ($group->save()) {
             Flash::success(Lang::get('groups.create-success'));
             return redirect(action('UsersManagementController@index') . '#orgagroups');
         } else {
@@ -62,7 +58,7 @@ class GroupsController extends Controller
      */
     public function show($id)
     {
-        $group = UserGroup::findOrFail($id);
+        $group = Group::findOrFail($id);
 
         $users = $this->organization->users()->get();
 
@@ -77,7 +73,7 @@ class GroupsController extends Controller
      */
     public function edit($id)
     {
-        $group = UserGroup::findOrFail($id);
+        $group = Group::findOrFail($id);
 
         return view('pages.groups.edit')->with('group', $group);
     }
@@ -92,25 +88,17 @@ class GroupsController extends Controller
      */
     public function update(GroupRequest $request, $id, OsjsService $service)
     {
-        //get the old version
-        $group_old = UserGroup::findOrFail($id);
-        $old_name = $this->organization->uuid . "-" . $group_old->name;
 
-        //update
-        $group = UserGroup::findOrFail($id);
+
+        $group = Group::findOrFail($id);
+
         $group->update($request->all());
-        $group->save();
 
-        //get the new version
-        $name = $this->organization->uuid . "#" . $group->name;
+        $group->organization_uuid = $this->organization->uuid;
 
-        if ($path = $service->renameDirectory('group', $old_name, $name)) {
+        $group->realname = $this->organization->uuid . "#" . $group->name;
 
-            $group->organization_uuid = $this->organization->uuid;
-            $group->realname = $name;
-            $group->path = $path;
-            $group->save();
-
+        if ($group->save()) {
             Flash::success(Lang::get('groups.update-success'));
         } else {
             Flash::error(Lang::get('groups.update-failed'));
@@ -128,14 +116,9 @@ class GroupsController extends Controller
      */
     public function destroy($id, OsjsService $service)
     {
-        $group = UserGroup::findOrFail($id);
+        $group = Group::findOrFail($id);
 
-        $name = $this->organization->uuid . "#" . $group->name;
-
-        if ($path = $service->deleteDirectory('group', $name)) {
-
-            $group->delete();
-
+        if ($group->delete()) {
             Flash::success(Lang::get('groups.destroy-success'));
         } else {
             Flash::error(Lang::get('groups.destroy-failed'));
@@ -144,5 +127,42 @@ class GroupsController extends Controller
         return redirect(action('UsersManagementController@index') . '#orgagroups');
     }
 
+    /**
+     * Add an user to a specified group
+     * @param $userId
+     * @param $groupId
+     * @return \Illuminate\Http\Response
+     */
+    public function addUserToGroup($groupId, $userId)
+    {
+
+        $group = Group::find($groupId);
+
+        $group->users()->attach($userId);
+
+        Flash::success(Lang::get('users_groups.update-success'));
+
+        return redirect(action('UsersManagementController@index') . '#orgagroupsaccess');
+
+    }
+
+    /**
+     * Remove user from a specified group
+     *
+     * @param $userId
+     * @param $groupId
+     * @return \Illuminate\Http\Response
+     */
+    public function removeUserFromGroup($groupId, $userId)
+    {
+        $group = Group::find($groupId);
+
+        $group->users()->detach($userId);
+
+        Flash::success(Lang::get('users_groups.update-success'));
+
+        return redirect(action('UsersManagementController@index') . '#orgagroupsaccess');
+
+    }
 
 }

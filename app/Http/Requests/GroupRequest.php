@@ -36,7 +36,7 @@ class GroupRequest extends Request
     {
 
         $rules = [
-            'name' => 'required|max:255|unique:users_groups,name,' . $this->id,
+            'name' => 'required|max:255|unique:groups,name,' . $this->id,
         ];
 
         return $rules;

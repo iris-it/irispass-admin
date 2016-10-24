@@ -64,7 +64,7 @@ class Organization extends Model
      */
     public function groups()
     {
-        return $this->hasMany('App\UserGroup');
+        return $this->hasMany('App\Group');
     }
 
     /**

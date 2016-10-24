@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AdminCreateUsersGroupsTable extends Migration
+class AdminCreateGroupsPivotTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,15 +14,10 @@ class AdminCreateUsersGroupsTable extends Migration
     {
         //
 
-        Schema::create('users_groups', function (Blueprint $table) {
+        Schema::create('groups_pivot', function (Blueprint $table) {
             $table->increments('id');
-            $table->text('name');
-            $table->text('realname');
-            $table->text('path');
-            $table->uuid('organization_uuid');
             $table->timestamps();
         });
-
     }
 
     /**
@@ -32,6 +27,6 @@ class AdminCreateUsersGroupsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('users_groups');
+        Schema::drop('groups_pivot');
     }
 }

@@ -3,6 +3,7 @@
 use App\UserProvider;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class UserProviderTableSeeder extends Seeder
 {
@@ -16,6 +17,7 @@ class UserProviderTableSeeder extends Seeder
         DB::table('oauth_identities')->delete();
         $statement = "ALTER TABLE oauth_identities AUTO_INCREMENT = 1;";
         DB::unprepared($statement);
+        Schema::disableForeignKeyConstraints();
 
         UserProvider::create([
             'user_id' => 1,

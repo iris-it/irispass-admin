@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class UserGroup extends Model
+class Group extends Model
 {
 
     /**
@@ -12,14 +12,14 @@ class UserGroup extends Model
      *
      * @var string
      */
-    protected $table = 'users_groups';
+    protected $table = 'groups';
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = ['name', 'realname', 'path', 'organization_uuid'];
+    protected $fillable = ['name', 'realname', 'organization_uuid'];
 
     /**
      * An os js group belongs to an organization
@@ -38,7 +38,7 @@ class UserGroup extends Model
      */
     public function users()
     {
-        return $this->belongsToMany('App\User', 'groups_users_pivot', 'group_id', 'user_id')->withTimestamps();
+        return $this->belongsToMany('App\User', 'groups_pivot', 'group_id', 'user_id')->withTimestamps();
     }
 
 }

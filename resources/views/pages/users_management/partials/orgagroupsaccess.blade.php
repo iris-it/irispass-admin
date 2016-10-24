@@ -36,11 +36,11 @@
                                                 <td>{{$user->given_name}} {{$user->family_name}}</td>
                                                 <td>
                                                     @if($group->users->contains('id', $user->id))
-                                                        {!! Form::open(['method' => 'POST','action' => ['UsersGroupsController@removeUserFromGroup', 'groupId' => $group->id,'userId' => $user->id]]) !!}
+                                                        {!! Form::open(['method' => 'POST','action' => ['GroupsController@removeUserFromGroup', 'groupId' => $group->id,'userId' => $user->id]]) !!}
                                                         <button class="btn btn-block btn-danger btn-flat" name="submit-usergroup-disable" type="submit">{{trans('usersmanagement.groupaccesstab-disable')}}</button>
                                                         {!! Form::close() !!}
                                                     @else
-                                                        {!! Form::open(['method' => 'POST','action' => ['UsersGroupsController@addUserToGroup','groupId' => $group->id,'userId' => $user->id]]) !!}
+                                                        {!! Form::open(['method' => 'POST','action' => ['GroupsController@addUserToGroup','groupId' => $group->id,'userId' => $user->id]]) !!}
                                                         <button class="btn btn-block btn-primary btn-flat" name="submit-usergroup-enable" type="submit">{{trans('usersmanagement.groupaccesstab-enable')}}</button>
                                                         {!! Form::close() !!}
 

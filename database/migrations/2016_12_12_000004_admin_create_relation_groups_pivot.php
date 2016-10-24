@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AdminCreateRelationGroupsUsersPivot extends Migration
+class AdminCreateRelationGroupsPivot extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,13 @@ class AdminCreateRelationGroupsUsersPivot extends Migration
     public function up()
     {
         //
-        Schema::table('groups_users_pivot', function (Blueprint $table) {
+        Schema::table('groups_pivot', function (Blueprint $table) {
 
             $table->integer('user_id')->unsigned()->index();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
             $table->integer('group_id')->unsigned()->index();
-            $table->foreign('group_id')->references('id')->on('users_groups')->onDelete('cascade');
+            $table->foreign('group_id')->references('id')->on('groups')->onDelete('cascade');
 
         });
 

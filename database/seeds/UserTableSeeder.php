@@ -3,6 +3,7 @@
 use App\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class UserTableSeeder extends Seeder
 {
@@ -16,6 +17,7 @@ class UserTableSeeder extends Seeder
         DB::table('users')->delete();
         $statement = "ALTER TABLE users AUTO_INCREMENT = 1;";
         DB::unprepared($statement);
+        Schema::disableForeignKeyConstraints();
 
         //has organisation and is manager
         User::create([

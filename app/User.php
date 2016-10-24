@@ -133,6 +133,6 @@ class User extends Authenticatable
      */
     public function groups()
     {
-        return $this->belongsToMany('App\UserGroup', 'groups_users_pivot', 'user_id', 'group_id')->withTimestamps();
+        return $this->belongsToMany('App\Group', 'groups_pivot', 'user_id', 'group_id')->withTimestamps();
     }
 }

@@ -7,7 +7,10 @@
 class_name: FunctionalTester
 modules:
     enabled:
-        - Db
         - Laravel5:
             environment_file: .env.testing
+            run_database_migrations: true
+            run_database_seeder: true
+            cleanup: true
+            database_seeder_class: TestingDatabaseSeeder
         - \Helper\Functional
