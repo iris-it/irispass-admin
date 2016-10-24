@@ -86,7 +86,7 @@ class GroupsController extends Controller
      * @param OsjsService $service
      * @return \Illuminate\Http\Response
      */
-    public function update(GroupRequest $request, $id, OsjsService $service)
+    public function update(GroupRequest $request, $id)
     {
 
 
@@ -114,7 +114,7 @@ class GroupsController extends Controller
      * @param OsjsService $service
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id, OsjsService $service)
+    public function destroy($id)
     {
         $group = Group::findOrFail($id);
 
