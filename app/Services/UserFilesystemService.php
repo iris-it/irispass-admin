@@ -105,18 +105,15 @@ class UserFilesystemService
 
     public function scandir(Request $request)
     {
-
         $content = [];
 
         $listing = $this->filesystem->listWith([
             'mimetype',
             'size',
             'timestamp'
-        ], $this->user_dir . $request->get('rel'));
+        ], $this->user_dir . DIRECTORY_SEPARATOR . $request->get('rel'));
 
         foreach ($listing as $key => $file) {
-
-
             $object = [];
             $object['filename'] = $file['basename'];
             $object['mime'] = (isset($file['mimetype'])) ? $file['mimetype'] : null;
@@ -129,9 +126,9 @@ class UserFilesystemService
             $content[] = $object;
         }
 
-        Log::debug($content);
+        logger($content);
 
-        return ['result' => $content];
+        return ['error' => false, 'result' => $content];
     }
 
     public function write(Request $request)

@@ -51,7 +51,7 @@ class UserController extends ApiController
 
         $groups = [];
 
-        $pivot = DB::table('groups_users_pivot')->where('user_id', $user->id)->get();
+        $pivot = DB::table('groups_pivot')->where('user_id', $user->id)->get();
 
         foreach ($pivot as $group) {
             $groups[] = Group::findOrFail($group->group_id)->toArray();

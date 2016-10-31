@@ -32,7 +32,9 @@ class FileSystemController extends ApiController
             $data = $filesystemService->call($method, $request);
 
         } else if ($mount === 'groups') {
-            ///
+            abort(405, 'not available now');
+        } else if ($mount === 'shared') {
+            abort(405, 'not available now');
         }
 
         return response()->json($data);
