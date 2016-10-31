@@ -3,6 +3,7 @@
 use App\Http\Requests\Request;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class UserRequest extends Request
 {
@@ -39,19 +40,37 @@ class UserRequest extends Request
         switch ($this->method()) {
             case 'POST': {
                 return [
-                    'preferred_username' => 'required|max:255|unique:users,preferred_username',
                     'family_name' => 'required|max:255',
                     'given_name' => 'required|max:255',
-                    'email' => 'required|email|max:255|unique:users,email',
+                    'preferred_username' => [
+                        'required',
+                        'max:255',
+                        Rule::unique('users', 'preferred_username')
+                    ],
+                    'email' => [
+                        'required',
+                        'email',
+                        'max:255',
+                        Rule::unique('users', 'email')
+                    ],
                 ];
             }
             case 'PATCH': {
                 $user = $this->auth->user();
                 return [
-                    'preferred_username' => 'required|max:255|unique:users,preferred_username,' . $user->id,
                     'family_name' => 'required|max:255',
                     'given_name' => 'required|max:255',
-                    'email' => 'required|email|max:255|unique:users,email,' . $user->id,
+                    'preferred_username' => [
+                        'required',
+                        'max:255',
+                        Rule::unique('users', 'preferred_username')->ignore($this->auth->id())
+                    ],
+                    'email' => [
+                        'required',
+                        'email',
+                        'max:255',
+                        Rule::unique('users', 'email')->ignore($this->auth->id())
+                    ],
                 ];
             }
         }

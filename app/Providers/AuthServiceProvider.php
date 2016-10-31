@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Permission;
+use App\Services\Auth\JWTGuard;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Schema;
@@ -26,6 +28,10 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
+
+        Auth::extend('jwt', function ($app, $name, array $config) {
+            return new JWTGuard(Auth::createUserProvider($config['provider']), $app['request']);
+        });
 
         foreach ($this->getPermissions() as $permission) {
             Gate::define($permission->name, function ($user) use ($permission) {

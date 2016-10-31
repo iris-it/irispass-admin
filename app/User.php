@@ -5,6 +5,8 @@ namespace App;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Log;
+use ReflectionFunction;
 
 class User extends Authenticatable
 {
@@ -39,16 +41,6 @@ class User extends Authenticatable
         'resource_access' => 'json',
         'settings' => 'json'
     ];
-
-    /**
-     * Get the primary key for the model.
-     *
-     * @return string
-     */
-    public function getKeyName()
-    {
-        return config('irispass.user_primary_key');
-    }
 
     /**
      * this assign roles to an user (obvious isn'it ?)

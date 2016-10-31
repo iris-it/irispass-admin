@@ -1,6 +1,7 @@
 <?php namespace App\Http\Requests;
 
 use Illuminate\Contracts\Auth\Guard;
+use Illuminate\Validation\Rule;
 
 class GroupRequest extends Request
 {
@@ -36,7 +37,11 @@ class GroupRequest extends Request
     {
 
         $rules = [
-            'name' => 'required|max:255|unique:groups,name,' . $this->id,
+            'name' => [
+                'required',
+                'max:255',
+                Rule::unique('groups', 'name')->ignore($this->id)
+            ]
         ];
 
         return $rules;

@@ -21,7 +21,8 @@
     "laracasts/flash": "^2.0",
     "predis/predis": "^1.1",
     "league/climate": "^3.2",
-    "league/flysystem-ziparchive": "^1.0"
+    "league/flysystem-ziparchive": "^1.0",
+    "firebase/php-jwt": "^4.0"
   },
   "require-dev": {
     "fzaninotto/faker": "~1.4",

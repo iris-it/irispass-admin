@@ -247,6 +247,9 @@ return [
         'Flash' => Laracasts\Flash\Flash::class,
         'Uuid' => Webpatser\Uuid\Uuid::class,
 
+        'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class,
+        'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,
+
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
     ],
 

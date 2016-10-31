@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +13,29 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:api');
+
+Route::get('/', function () {
+    return [
+        'api' => 'v-0.0.1',
+        'provider' => 'irispass'
+    ];
+});
+
+Route::group(['middleware' => 'auth:api'], function () {
+
+
+    Route::get('me', 'UserController@getCurrentUser');
+
+    Route::put('settings', 'UserController@updateSettings');
+
+    Route::get('me/groups', 'UserController@getUserGroups');
+
+    Route::any('filesystem/{mount}/{method}', 'FileSystemController@handleRequests');
+
+});
+
+
+
+
+
+
