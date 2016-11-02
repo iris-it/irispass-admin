@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Filesystems;
 
 
 use App\User;
@@ -41,66 +41,7 @@ class UserFilesystemService
 
     public function call($method, Request $request)
     {
-        switch ($method) {
-
-            case 'scandir':
-                return $this->scandir($request);
-                break;
-
-            case 'write':
-                return $this->write($request);
-                break;
-
-            case 'read':
-                return $this->read($request);
-                break;
-
-            case 'copy':
-                return $this->copy($request);
-                break;
-
-            case 'move':
-                return $this->move($request);
-                break;
-
-            case 'unlink':
-                return $this->unlink($request);
-                break;
-
-            case 'mkdir':
-                return $this->mkdir($request);
-                break;
-
-            case 'exists':
-                return $this->exists($request);
-                break;
-
-            case 'fileinfo':
-                return $this->fileinfo($request);
-                break;
-
-            case 'url':
-                return $this->url($request);
-                break;
-
-            case 'upload':
-                return $this->upload($request);
-                break;
-
-            case 'download':
-                return $this->download($request);
-                break;
-
-            case 'freeSpace':
-                return $this->freeSpace($request);
-                break;
-
-            case 'find':
-                return $this->find($request);
-                break;
-        }
-
-        return [];
+        return $this->{$method}($request);
     }
 
     public function scandir(Request $request)
@@ -166,7 +107,7 @@ class UserFilesystemService
 
     public function exists(Request $request)
     {
-        return [];
+        return file_exists(self::_getRealPath($arguments['path']));
     }
 
     public function fileinfo(Request $request)
@@ -176,7 +117,24 @@ class UserFilesystemService
 
     public function url(Request $request)
     {
+        logger($request->all());
+
+        //get file token
+
         return [];
+    }
+
+    public function file(Request $request)
+    {
+        //get file token in DB :)
+
+        //check permissions
+
+        //path to file
+
+        //get mimetype
+
+        //send back file
     }
 
     public function upload(Request $request)
@@ -273,21 +231,5 @@ class UserFilesystemService
         return null;
     }
 
-    public function encodeData($data)
-    {
-        if (is_array($data)) {
-            array_walk_recursive($data, function (&$item, $key) {
-                if (is_string($item)) {
-                    if (!mb_detect_encoding($item, 'utf-8', true)) {
-                        $item = utf8_encode($item);
-                    }
-                }
-            });
-        } else {
-            $data = utf8_encode($data);
-        }
-
-        return $data;
-    }
 
 }

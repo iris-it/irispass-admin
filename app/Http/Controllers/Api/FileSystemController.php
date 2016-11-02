@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Services\UserFilesystemService;
+use App\Services\Filesystems\UserFilesystemService;
 use Illuminate\Http\Request;
 
 class FileSystemController extends ApiController
