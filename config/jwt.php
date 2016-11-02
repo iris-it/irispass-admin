@@ -32,7 +32,7 @@ return [
         |
         */
 
-        'public' => file_get_contents(storage_path('app/keys/public.key')),
+        'public' => file_get_contents(storage_path('app/keys/' . env('APP_ENV') . '/public.key')),
 
         /*
         |--------------------------------------------------------------------------
@@ -45,7 +45,7 @@ return [
         |
         */
 
-        'private' => file_get_contents(storage_path('app/keys/private.key')),
+        'private' => file_get_contents(storage_path('app/keys/' . env('APP_ENV') . '/private.key')),
 
     ],
 
