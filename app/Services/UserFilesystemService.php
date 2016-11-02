@@ -108,31 +108,13 @@ class UserFilesystemService
         $content = [];
 
         $relative_path = $this->user_dir . DIRECTORY_SEPARATOR . $request->get('rel');
+        $virtual_path = $request->get('root') . $request->get('rel');
 
-        $full_path = $this->user_container . $relative_path;
-
-        $listing = $this->filesystem->listWith([
-            'size',
-            'timestamp'
-        ], $relative_path, true);
-
-        foreach ($listing as $key => $file) {
-            $object = [];
-
-            $mimetype = $this->getFileMime($full_path . $file['basename']);
-
-            $object['filename'] = $file['basename'];
-            $object['mime'] = (isset($mimetype)) ? $mimetype : null;
-            $object['path'] = $request->get('root') . $request->get('rel') . $file['basename'];
-            $object['size'] = (isset($file['size'])) ? $file['size'] : 0;
-            $object['type'] = $file['type'];
-            $object['ctime'] = date(self::DATE_FORMAT, $file['timestamp']);
-            $object['mtime'] = null;
-
-            $content[] = $object;
+        foreach ($this->filesystem->listContents($relative_path) as $key => $file) {
+            $content[] = $this->getFileData($file, $virtual_path);
         }
 
-        return ['error' => false, 'result' => $this->encodeData($content)];
+        return ['error' => false, 'result' => $content];
     }
 
     public function write(Request $request)
@@ -240,6 +222,41 @@ class UserFilesystemService
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////                       UTILS                      ////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    public function getFileData($file, $virtual_path)
+    {
+
+        $full_path = $this->user_container . $file['path'];
+
+        $type = @is_dir($full_path) ? 'dir' : 'file';
+        $mime = '';
+        $size = 0;
+
+        if (($mtime = @filemtime($full_path)) > 0) {
+            $mtime = date(self::DATE_FORMAT, $mtime);
+        }
+
+        if (($ctime = @filectime($full_path)) > 0) {
+            $ctime = date(self::DATE_FORMAT, $ctime);
+        }
+
+        if ($type === 'file') {
+            if (is_writable($full_path) || is_readable($full_path)) {
+                $mime = $this->getFileMime($full_path);
+                $size = filesize($full_path);
+            }
+        }
+
+        return [
+            'filename' => utf8_encode($file['basename']),
+            'path' => utf8_encode($virtual_path . $file['basename']),
+            'size' => $size ?: 0,
+            'type' => $type,
+            'mime' => $mime,
+            'ctime' => $ctime ?: null,
+            'mtime' => $mtime ?: null
+        ];
+    }
+
 
     public function getFileMime($file_name)
     {
