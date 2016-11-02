@@ -4,8 +4,8 @@ namespace App\Services;
 
 
 use App\User;
+use ErrorException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Plugin\GetWithMetadata;
@@ -107,16 +107,22 @@ class UserFilesystemService
     {
         $content = [];
 
+        $relative_path = $this->user_dir . DIRECTORY_SEPARATOR . $request->get('rel');
+
+        $full_path = $this->user_container . $relative_path;
+
         $listing = $this->filesystem->listWith([
-            'mimetype',
             'size',
             'timestamp'
-        ], $this->user_dir . DIRECTORY_SEPARATOR . $request->get('rel'));
+        ], $relative_path, true);
 
         foreach ($listing as $key => $file) {
             $object = [];
+
+            $mimetype = $this->getFileMime($full_path . $file['basename']);
+
             $object['filename'] = $file['basename'];
-            $object['mime'] = (isset($file['mimetype'])) ? $file['mimetype'] : null;
+            $object['mime'] = (isset($mimetype)) ? $mimetype : null;
             $object['path'] = $request->get('root') . $request->get('rel') . $file['basename'];
             $object['size'] = (isset($file['size'])) ? $file['size'] : 0;
             $object['type'] = $file['type'];
@@ -126,19 +132,33 @@ class UserFilesystemService
             $content[] = $object;
         }
 
-        logger($content);
-
-        return ['error' => false, 'result' => $content];
+        return ['error' => false, 'result' => $this->encodeData($content)];
     }
 
     public function write(Request $request)
     {
-        return [];
+
+        return;
     }
 
     public function read(Request $request)
     {
-        return [];
+
+        logger($request->all());
+
+        $file_path = $this->user_dir . DIRECTORY_SEPARATOR . $request->get('rel');
+
+        $stream = $this->filesystem->readStream($file_path);
+
+        $info = $this->filesystem->getWithMetadata($file_path, ['mimetype', 'size', 'timestamp']);
+
+        $contents = stream_get_contents($stream);
+
+        if (is_resource($stream)) {
+            fclose($stream);
+        }
+
+        return $contents;
     }
 
     public function copy(Request $request)
@@ -215,6 +235,42 @@ class UserFilesystemService
         }
 
         return $exists;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////                       UTILS                      ////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public function getFileMime($file_name)
+    {
+        if (is_string($file_name) && $file_name !== '' && is_file($file_name)) {
+            if ($extension = pathinfo($file_name, PATHINFO_EXTENSION)) {
+                $extension = strtolower($extension);
+                $mime = config('mimes');
+                if (isset($mime[$extension])) {
+                    return $mime[$extension];
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public function encodeData($data)
+    {
+        if (is_array($data)) {
+            array_walk_recursive($data, function (&$item, $key) {
+                if (is_string($item)) {
+                    if (!mb_detect_encoding($item, 'utf-8', true)) {
+                        $item = utf8_encode($item);
+                    }
+                }
+            });
+        } else {
+            $data = utf8_encode($data);
+        }
+
+        return $data;
     }
 
 }

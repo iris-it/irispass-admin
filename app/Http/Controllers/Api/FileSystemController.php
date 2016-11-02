@@ -38,8 +38,6 @@ class FileSystemController extends ApiController
         }
 
         return response()->json($data);
-
     }
-
 
 }
