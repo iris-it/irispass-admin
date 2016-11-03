@@ -21,6 +21,19 @@ class FileSystemController extends ApiController
         $this->payload = auth('api')->payload();
     }
 
+    /**
+     * This method is a commander for all the specific vfs methods
+     * there is a differenciation between mounts ( home / groups / shared )
+     * because they has not the same behavior
+     *
+     * if an array is provided as response, json will be return
+     *
+     *
+     * @param Request $request
+     * @param $mount
+     * @param $method
+     * @return array|\Illuminate\Http\JsonResponse
+     */
     public function handleRequests(Request $request, $mount, $method)
     {
 
@@ -46,6 +59,24 @@ class FileSystemController extends ApiController
         return $data;
     }
 
+    /**
+     * Serves file with their mime types, this a static resource provider
+     * Independent of filesystems
+     *
+     * A file token is needed to retrieve the file
+     *
+     * An access token need to be provided to ensure
+     * the security if the file is not public
+     *
+     * There is a gate to check that the user is permitted to open the file
+     * if the file is opened inside os.js or other app with bearer in request
+     * the user will be resolved automatically
+     *
+     * if the app is open outside, the access token will resolve the user
+     * and his permissions
+     *
+     * @param Request $request
+     */
     public function serveFile(Request $request)
     {
 
@@ -62,10 +93,6 @@ class FileSystemController extends ApiController
         $fileShareService = new FileShareService();
 
         $fileShareService->initialize($file);
-
-        // TODO add time limited access token for sharing and etc
-        // For now the token is one access, if the cache returns false
-        // Need to search in a "access" table to see access of users on the files
 
         if (!$fileShareService->can('read', $this->user ?: Cache::get($access_token))) {
             abort(403, 'Not Authorized');
