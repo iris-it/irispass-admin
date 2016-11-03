@@ -2,7 +2,6 @@
 
 use App\Http\Requests\OrganizationRequest;
 use App\Organization;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
 use Laracasts\Flash\Flash;
 use Webpatser\Uuid\Uuid;

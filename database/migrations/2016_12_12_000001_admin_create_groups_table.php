@@ -16,6 +16,7 @@ class AdminCreateGroupsTable extends Migration
 
         Schema::create('groups', function (Blueprint $table) {
             $table->increments('id');
+            $table->uuid('uuid')->nullable();
             $table->text('name')->nullable();
             $table->text('realname')->nullable();
             $table->uuid('organization_uuid')->nullable();

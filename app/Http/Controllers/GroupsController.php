@@ -8,6 +8,7 @@ use App\Services\OsjsService;
 use App\Group;
 use Illuminate\Support\Facades\Lang;
 use Laracasts\Flash\Flash;
+use Webpatser\Uuid\Uuid;
 
 class GroupsController extends Controller
 {
@@ -33,6 +34,8 @@ class GroupsController extends Controller
     {
 
         $group = Group::create($request->all());
+
+        $group->uuid = Uuid::generate(4)->string;
 
         $group->organization_uuid = $this->organization->uuid;
 

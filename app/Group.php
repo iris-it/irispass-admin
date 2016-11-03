@@ -19,7 +19,7 @@ class Group extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'realname', 'organization_uuid'];
+    protected $fillable = ['uuid', 'name', 'realname', 'organization_uuid'];
 
     /**
      * An os js group belongs to an organization
