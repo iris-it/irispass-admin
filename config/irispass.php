@@ -3,6 +3,17 @@
 
 return [
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | File open on external domains
+    |--------------------------------------------------------------------------
+    | Set the lifetime of the access token
+    | If expired no one can retrieve this link
+    |
+    */
+    'file_token_lifetime' => 60,
+
     /*
     |--------------------------------------------------------------------------
     | Service Configuration
@@ -18,14 +29,14 @@ return [
     */
 
     'cms' => [
-        'master_path' => env('CMS_MASTER_PATH'),
-        'path' => env('CMS_PATH'),
-    ],
+    'master_path' => env('CMS_MASTER_PATH'),
+    'path' => env('CMS_PATH'),
+],
 
     'osjs' => [
-        'disk' => env('OSJS_DISK'),
-        'vfs_path' => env('OSJS_VFS_PATH')
-    ],
+    'disk' => env('OSJS_DISK'),
+    'vfs_path' => env('OSJS_VFS_PATH')
+],
 
     /*
     |--------------------------------------------------------------------------
@@ -42,8 +53,8 @@ return [
     */
 
     'keycloak' => [
-        'username' => env('KEYCLOAK_USERNAME'),
-        'password' => env('KEYCLOAK_PASSWORD'),
-    ],
+    'username' => env('KEYCLOAK_USERNAME'),
+    'password' => env('KEYCLOAK_PASSWORD'),
+],
 
 ];

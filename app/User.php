@@ -127,4 +127,5 @@ class User extends Authenticatable
     {
         return $this->belongsToMany('App\Group', 'groups_pivot', 'user_id', 'group_id')->withTimestamps();
     }
+    
 }

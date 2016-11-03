@@ -3,13 +3,16 @@
 namespace App\Services\Filesystems;
 
 
+use App\File;
 use App\User;
 use ErrorException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Plugin\GetWithMetadata;
 use League\Flysystem\Plugin\ListWith;
+use Webpatser\Uuid\Uuid;
 
 class UserFilesystemService
 {
@@ -21,11 +24,15 @@ class UserFilesystemService
 
     private $user_dir;
 
+    private $user;
+
     public function initialize(User $user, $user_id)
     {
         $this->user_container = str_replace(['\\', '/'], DIRECTORY_SEPARATOR, config('irispass.osjs.vfs_path')) . DIRECTORY_SEPARATOR . 'home' . DIRECTORY_SEPARATOR;
 
         $this->user_dir = $user_id;
+
+        $this->user = $user;
 
         $adapter = new Local($this->user_container);
 
@@ -117,24 +124,36 @@ class UserFilesystemService
 
     public function url(Request $request)
     {
-        logger($request->all());
+        $virtual_path = $request->get('root') . $request->get('rel');
 
-        //get file token
+        $file = File::where('virtual_path', $virtual_path)->first();
 
-        return [];
-    }
+        if (!$file) {
+            $full_path = $this->user_container . $this->user_dir . DIRECTORY_SEPARATOR . $request->get('rel');
 
-    public function file(Request $request)
-    {
-        //get file token in DB :)
+            $file = File::create([
+                'uuid' => Uuid::generate(4)->string,
+                'name' => $this->getFileName($full_path),
+                'mime' => $this->getFileMime($full_path),
+                'full_path' => $full_path,
+                'virtual_path' => $virtual_path,
+                'owner_id' => $this->user->sub,
+                'users' => [],
+                'groups' => [],
+                'organizations' => [],
+                'is_public' => false
+            ]);
+        }
 
-        //check permissions
+        if ($file->is_public) {
+            return env('APP_URL') . '/api/filesystem/file?file_id=' . $file->uuid;
+        }
 
-        //path to file
+        $access_key = Uuid::generate(4)->string;
 
-        //get mimetype
+        Cache::put($access_key, $this->user->sub, config('irispass.file_token_lifetime', 60));
 
-        //send back file
+        return env('APP_URL') . '/api/filesystem/file?file_id=' . $file->uuid . '&access_key=' . $access_key;
     }
 
     public function upload(Request $request)
@@ -180,6 +199,7 @@ class UserFilesystemService
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////                       UTILS                      ////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     public function getFileData($file, $virtual_path)
     {
 
@@ -188,14 +208,6 @@ class UserFilesystemService
         $type = @is_dir($full_path) ? 'dir' : 'file';
         $mime = '';
         $size = 0;
-
-        if (($mtime = @filemtime($full_path)) > 0) {
-            $mtime = date(self::DATE_FORMAT, $mtime);
-        }
-
-        if (($ctime = @filectime($full_path)) > 0) {
-            $ctime = date(self::DATE_FORMAT, $ctime);
-        }
 
         if ($type === 'file') {
             if (is_writable($full_path) || is_readable($full_path)) {
@@ -210,16 +222,33 @@ class UserFilesystemService
             'size' => $size ?: 0,
             'type' => $type,
             'mime' => $mime,
-            'ctime' => $ctime ?: null,
-            'mtime' => $mtime ?: null
+            'ctime' => $this->getFileCtime($full_path) ?: null,
+            'mtime' => $this->getFileMtime($full_path) ?: null
         ];
     }
 
-
-    public function getFileMime($file_name)
+    public function getFileCtime($full_path)
     {
-        if (is_string($file_name) && $file_name !== '' && is_file($file_name)) {
-            if ($extension = pathinfo($file_name, PATHINFO_EXTENSION)) {
+        if (($ctime = @filectime($full_path)) > 0) {
+            return date(self::DATE_FORMAT, $ctime);
+        }
+
+        return null;
+    }
+
+    public function getFileMtime($full_path)
+    {
+        if (($mtime = @filemtime($full_path)) > 0) {
+            return date(self::DATE_FORMAT, $mtime);
+        }
+
+        return null;
+    }
+
+    public function getFileMime($full_path)
+    {
+        if (is_string($full_path) && $full_path !== '' && is_file($full_path)) {
+            if ($extension = pathinfo($full_path, PATHINFO_EXTENSION)) {
                 $extension = strtolower($extension);
                 $mime = config('mimes');
                 if (isset($mime[$extension])) {
@@ -229,6 +258,11 @@ class UserFilesystemService
         }
 
         return null;
+    }
+
+    public function getFileName($full_path)
+    {
+        return basename($full_path);
     }
 
 

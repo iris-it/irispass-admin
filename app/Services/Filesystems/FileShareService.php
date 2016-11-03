@@ -35,10 +35,26 @@ class FileShareService
 
     }
 
-    public function can($action, User $user)
+    public function can($action, $user = null)
     {
         if (!in_array($action, ['read', 'write'])) {
             throw new BadMethodCallException('can only accept "read" or "write" as action');
+        }
+
+        if ($action === 'read' && $this->file->is_public) {
+            return true;
+        }
+
+        if ($user !== null && !$user instanceof User) {
+            $user = User::where('sub', $user)->first();
+        }
+
+        if (!$user) {
+            return false;
+        }
+
+        if ($this->file->owner_id === $user->sub) {
+            return true;
         }
 
         $user_organization_uuid = $user->organization->uuid;

@@ -21,6 +21,8 @@ Route::get('/', function () {
     ];
 });
 
+Route::get('filesystem/file', 'FileSystemController@serveFile');
+
 Route::group(['middleware' => 'auth:api'], function () {
 
 
@@ -33,6 +35,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::any('filesystem/{mount}/{method}', 'FileSystemController@handleRequests');
 
 });
+
 
 
 

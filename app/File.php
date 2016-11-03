@@ -21,7 +21,8 @@ class File extends Model
     protected $fillable = [
         'uuid',
         'name',
-        'path',
+        'full_path',
+        'virtual_path',
         'mime',
         'owner_id',
 
@@ -38,14 +39,5 @@ class File extends Model
         'organizations' => 'array',
         'is_public' => 'boolean'
     ];
-
-    /**
-     * An organization belongs to an user
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function owner()
-    {
-        return $this->belongsTo('App\User', 'owner_id');
-    }
 
 }
