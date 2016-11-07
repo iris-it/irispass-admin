@@ -59,19 +59,30 @@ return [
             'visibility' => 'public',
         ],
 
-        'osjs' => [
+        'osjs_home' => [
             'driver' => 'local',
-            'root' => env('OSJS_VFS_PATH'),
+            'root' => env('OSJS_VFS_HOME_PATH'),
         ],
 
-        's3' => [
-            'driver' => 's3',
-            'key' => 'your-key',
-            'secret' => 'your-secret',
-            'region' => 'your-region',
-            'bucket' => 'your-bucket',
+        'osjs_groups' => [
+            'driver' => 'local',
+            'root' => env('OSJS_VFS_GROUPS_PATH'),
         ],
 
+        'osjs_shared' => [
+            'driver' => 'local',
+            'root' => env('OSJS_VFS_SHARED_PATH'),
+        ],
+
+        'cms_container' => [
+            'driver' => 'local',
+            'root' => env('CMS_CONTAINER_PATH'),
+        ],
+
+        'cms_master' => [
+            'driver' => 'local',
+            'root' => env('CMS_MASTER_PATH'),
+        ],
     ],
 
 ];

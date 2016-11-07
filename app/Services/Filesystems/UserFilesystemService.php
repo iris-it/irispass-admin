@@ -6,8 +6,10 @@ namespace App\Services\Filesystems;
 use App\File;
 use App\User;
 use ErrorException;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Storage;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Plugin\GetWithMetadata;
@@ -41,20 +43,16 @@ class UserFilesystemService
      */
     public function initialize(User $user, $user_id)
     {
-        $this->user_container = str_replace(['\\', '/'], DIRECTORY_SEPARATOR, config('irispass.osjs.vfs_path')) . DIRECTORY_SEPARATOR . 'home' . DIRECTORY_SEPARATOR;
+        $this->user_container = str_replace(['\\', '/'], DIRECTORY_SEPARATOR, config('filesystems.disks.osjs_home.root') . DIRECTORY_SEPARATOR);
 
         $this->user_dir = $user_id;
 
         $this->user = $user;
 
-        $adapter = new Local($this->user_container);
-
-        $this->filesystem = new Filesystem($adapter);
-        $this->filesystem->addPlugin(new ListWith);
-        $this->filesystem->addPlugin(new GetWithMetadata);
+        $this->filesystem = Storage::disk('osjs_home');
 
         if ($this->checkExistence($this->user_dir) !== true && !is_dir($this->user_container . $this->user_dir)) {
-            $this->filesystem->createDir($this->user_dir);
+            $this->filesystem->makeDirectory($this->user_dir);
         }
 
     }
@@ -74,6 +72,7 @@ class UserFilesystemService
     {
         //middleware ? on methods
         if (in_array($method, ['read', 'url', 'exists', 'fileinfo'])) {
+
             $file = $this->createOrGetFile($request, $this->user->sub);
 
             $this->checkUserReadPermissions($file);
@@ -81,8 +80,20 @@ class UserFilesystemService
             return $this->{$method}($request, $file);
         }
 
-        if (in_array($method, ['write', 'mkdir'])) {
-            return $this->{$method}($request);
+        if (in_array($method, ['mkdir'])) {
+
+            $file = $this->createOrGetFile($request, $this->user->sub);
+
+            return $this->{$method}($request, $file);
+        }
+
+        if (in_array($method, ['write'])) {
+
+            $file = $this->createOrGetFile($request, $this->user->sub);
+
+            $this->checkUserWritePermissions($file);
+
+            return $this->{$method}($request, $file);
         }
 
         return $this->{$method}($request);
@@ -94,6 +105,7 @@ class UserFilesystemService
      *
      * @param Request $request
      * @return array
+     * @throws Exception
      */
     public function scandir(Request $request)
     {
@@ -101,18 +113,57 @@ class UserFilesystemService
 
         $relative_path = $this->user_dir . DIRECTORY_SEPARATOR . $request->get('rel');
         $virtual_path = $request->get('root') . $request->get('rel');
+        $full_path = $this->user_container . $relative_path;
 
-        foreach ($this->filesystem->listContents($relative_path) as $key => $file) {
-            $content[] = $this->getFileData($file, $virtual_path);
+        if (file_exists($full_path) && is_dir($full_path)) {
+
+            if (($files = scandir($full_path)) !== false) {
+
+                foreach ($files as $file_name) {
+
+                    if ($file_name == "." || $file_name == "..") {
+                        continue;
+                    }
+
+                    $content[] = $this->getFileData($relative_path . DIRECTORY_SEPARATOR . $file_name, $virtual_path);
+                }
+            }
+
+        } else {
+
+            throw new Exception("Directory does not exist");
         }
 
         return ['error' => false, 'result' => $content];
     }
 
-    public function write(Request $request)
+    public function write(Request $request, $file)
     {
+        if (is_file($file->full_path)) {
 
-        return;
+            if (!is_file($file->full_path)) {
+                throw new Exception("You are writing to a invalid resource");
+            }
+
+            if (!is_writable($file->full_path)) {
+                throw new Exception("Write permission denied");
+            }
+
+        } else {
+            if (!is_writable(dirname($file->full_path))) {
+                throw new Exception("Write permission denied in folder");
+            }
+        }
+
+        $content = $request->get('data');
+
+        $options = $request->get('options');
+
+        if (empty($options["raw"]) || $options["raw"] === false) {
+            $content = base64_decode(substr($content, strpos($content, ",") + 1));
+        }
+
+        return ['error' => file_put_contents($file->full_path, $content)];
     }
 
     /**
@@ -121,6 +172,7 @@ class UserFilesystemService
      *
      * @param Request $request
      * @param $file
+     * @throws Exception
      */
     public function read(Request $request, $file)
     {
@@ -138,6 +190,9 @@ class UserFilesystemService
             fclose($handle);
             exit;
         }
+
+        throw new Exception("Directory does not exist");
+
     }
 
     public function copy(Request $request)
@@ -156,12 +211,19 @@ class UserFilesystemService
     }
 
 
-    public function mkdir(Request $request)
+    public function mkdir(Request $request, $file)
     {
+        $file->is_directory = true;
+
+        $file->save();
 
         logger($request->all());
 
-        return [];
+        $relative_path = $this->user_dir . DIRECTORY_SEPARATOR . $request->get('rel');
+
+        $this->filesystem->createDir($relative_path);
+
+        return ['error' => false];
     }
 
     /**
@@ -274,7 +336,8 @@ class UserFilesystemService
                 'users' => [],
                 'groups' => [],
                 'organizations' => [],
-                'is_public' => false
+                'is_public' => false,
+                'is_directory' => false,
             ]);
         }
 
@@ -283,14 +346,15 @@ class UserFilesystemService
 
     /**
      * Retrieve file information and layout the content
-     * @param $file
+     * @param $path
      * @param $virtual_path
      * @return array
      */
-    public function getFileData($file, $virtual_path)
+    public function getFileData($path, $virtual_path)
     {
 
-        $full_path = $this->user_container . $file['path'];
+        $full_path = $this->user_container . $path;
+        $file_name = $this->getFileName($full_path);
 
         $type = @is_dir($full_path) ? 'dir' : 'file';
         $mime = '';
@@ -304,8 +368,8 @@ class UserFilesystemService
         }
 
         return [
-            'filename' => utf8_encode($file['basename']),
-            'path' => utf8_encode($virtual_path . $file['basename']),
+            'filename' => utf8_encode($file_name),
+            'path' => utf8_encode(str_replace(['////'], '///', $virtual_path . '/' . $file_name)),
             'size' => $size ?: 0,
             'type' => $type,
             'mime' => $mime,
@@ -426,22 +490,7 @@ class UserFilesystemService
      */
     public function checkExistence($identifier)
     {
-        $exists = false;
-
-        $adapter = new Local($this->user_dir);
-
-        $filesystem = new Filesystem($adapter);
-
-        $contents = $filesystem->listContents('/');
-
-        foreach ($contents as $directory) {
-            if ($directory['basename'] == $identifier) {
-                $exists = true;
-                return $exists;
-            }
-        }
-
-        return $exists;
+        return $this->filesystem->exists($identifier);
     }
 
 

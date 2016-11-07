@@ -27,6 +27,7 @@ class AdminCreateFilesTable extends Migration
             $table->longText('organizations')->nullable();
 
             $table->timestamp('lifetime')->nullable();
+            $table->boolean('is_directory')->false();
             $table->boolean('is_public')->false();
             $table->string('owner_id')->false();
 

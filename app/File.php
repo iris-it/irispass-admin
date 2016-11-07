@@ -30,6 +30,7 @@ class File extends Model
         'groups',
         'organizations',
         'lifetime',
+        'is_directory',
         'is_public',
     ];
 
@@ -37,7 +38,8 @@ class File extends Model
         'users' => 'array',
         'groups' => 'array',
         'organizations' => 'array',
-        'is_public' => 'boolean'
+        'is_directory' => 'boolean',
+        'is_public' => 'boolean',
     ];
 
 }

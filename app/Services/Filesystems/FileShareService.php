@@ -16,6 +16,8 @@ class FileShareService
 
     private $file;
 
+    private $directory;
+
     /**
      * This function initializes the File share check
      * We can provide an UUID, a path, a virtual path or a instance of App\File
