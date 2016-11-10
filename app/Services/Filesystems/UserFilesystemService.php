@@ -358,12 +358,37 @@ class UserFilesystemService
 
     public function upload(Request $request)
     {
-        return [];
-    }
 
-    public function download(Request $request)
-    {
-        return [];
+        $file = $this->createOrGetFile($request, $this->user->sub);
+
+        //$this->checkUserWritePermissions($file);
+
+        if (is_file($file->full_path)) {
+
+            if (!is_file($file->full_path)) {
+                throw new Exception("You are writing to a invalid resource");
+            }
+
+            if (!is_writable($file->full_path)) {
+                throw new Exception("Write permission denied");
+            }
+
+        } else {
+            if (!is_writable(dirname($file->full_path))) {
+                throw new Exception("Write permission denied in folder");
+            }
+        }
+
+        $content = $request->get('data');
+
+        $options = $request->get('options');
+
+        if (empty($options["raw"]) || $options["raw"] === false) {
+            $content = base64_decode(substr($content, strpos($content, ",") + 1));
+        }
+
+        return ['error' => file_put_contents($file->full_path, $content)];
+
     }
 
     public function freeSpace(Request $request)
@@ -398,7 +423,7 @@ class UserFilesystemService
         $file = File::where('virtual_path', $virtual_path)->first();
 
         if (!$file) {
-            return $this->createFile($virtual_path, $full_path, $full_path);
+            return $this->createFile($virtual_path, $full_path, $user_sub);
         }
 
         return $file;
