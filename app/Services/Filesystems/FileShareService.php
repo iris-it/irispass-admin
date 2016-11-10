@@ -97,7 +97,6 @@ class FileShareService
         $user_groups_uuid = $user->groups->pluck('uuid');
         $user_sub = $user->sub;
 
-
         foreach ($this->file->organizations as $uuid => $rights) {
             if ($user_organization_uuid === $uuid) {
                 return $rights[$action];

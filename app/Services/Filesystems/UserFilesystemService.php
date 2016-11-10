@@ -51,7 +51,7 @@ class UserFilesystemService
 
         $this->filesystem = Storage::disk('osjs_home');
 
-        if ($this->checkExistence($this->user_dir) !== true && !is_dir($this->user_container . $this->user_dir)) {
+        if ($this->filesystem->exists($this->user_dir) !== true && !is_dir($this->user_container . $this->user_dir)) {
             $this->filesystem->makeDirectory($this->user_dir);
         }
 
@@ -70,32 +70,7 @@ class UserFilesystemService
      */
     public function call($method, Request $request)
     {
-        //middleware ? on methods
-        if (in_array($method, ['read', 'url', 'exists', 'fileinfo'])) {
-
-            $file = $this->createOrGetFile($request, $this->user->sub);
-
-            $this->checkUserReadPermissions($file);
-
-            return $this->{$method}($request, $file);
-        }
-
-        if (in_array($method, ['mkdir'])) {
-
-            $file = $this->createOrGetFile($request, $this->user->sub);
-
-            return $this->{$method}($request, $file);
-        }
-
-        if (in_array($method, ['write'])) {
-
-            $file = $this->createOrGetFile($request, $this->user->sub);
-
-            $this->checkUserWritePermissions($file);
-
-            return $this->{$method}($request, $file);
-        }
-
+        //find a way to apply middleware
         return $this->{$method}($request);
     }
 
@@ -137,8 +112,12 @@ class UserFilesystemService
         return ['error' => false, 'result' => $content];
     }
 
-    public function write(Request $request, $file)
+    public function write(Request $request)
     {
+        $file = $this->createOrGetFile($request, $this->user->sub);
+
+        $this->checkUserWritePermissions($file);
+
         if (is_file($file->full_path)) {
 
             if (!is_file($file->full_path)) {
@@ -171,11 +150,15 @@ class UserFilesystemService
      * with the corrects header to emulate a real file
      *
      * @param Request $request
-     * @param $file
      * @throws Exception
      */
-    public function read(Request $request, $file)
+    public function read(Request $request)
     {
+
+        $file = $this->createOrGetFile($request, $this->user->sub);
+
+        $this->checkUserReadPermissions($file);
+
         if ($handle = fopen($file->full_path, "rb")) {
             $length = filesize($file->full_path);
             $etag = md5(serialize(fstat($handle)));
@@ -197,31 +180,110 @@ class UserFilesystemService
 
     public function copy(Request $request)
     {
-        return [];
+        $data = $request->get('data');
+
+        $src = $data['src'];
+        $src_relative_path = $this->user_dir . DIRECTORY_SEPARATOR . $src['rel'];
+        $src_full_path = $this->user_container . $src_relative_path;
+
+        $dest = $data['dest'];
+        $dest_relative_path = $this->user_dir . DIRECTORY_SEPARATOR . $dest['rel'];
+        $dest_full_path = $this->user_container . $dest_relative_path;
+
+        if ($src['moduleName'] === "osjs" || $dest['moduleName'] === "osjs") {
+            throw new Exception("Not allowed");
+        }
+
+        if ($src['path'] === $dest['path']) {
+            throw new Exception("Source and destination cannot be the same");
+        }
+
+        if (!file_exists($src_full_path)) {
+            throw new Exception("File does not exist");
+        }
+
+        if (!is_writeable(dirname($dest_full_path))) {
+            throw new Exception("Permission denied");
+        }
+
+        if (file_exists($dest_full_path)) {
+            throw new Exception("Destination file already exist");
+        }
+
+        if (copy($src_full_path, $dest_full_path)) {
+
+            $this->createFile($dest['path'], $dest_full_path, $this->user->sub);
+
+            return ['error' => false];
+        }
+
+        return ['error' => true];
     }
 
     public function move(Request $request)
     {
-        return [];
+        logger($request->all());
+        $data = $request->get('data');
+
+        $src = $data['src'];
+        $src_relative_path = $this->user_dir . DIRECTORY_SEPARATOR . $src['rel'];
+        $src_full_path = $this->user_container . $src_relative_path;
+
+        $dest = $data['dest'];
+        $dest_relative_path = $this->user_dir . DIRECTORY_SEPARATOR . $dest['rel'];
+        $dest_full_path = $this->user_container . $dest_relative_path;
+
+        if ($src['moduleName'] === "osjs" || $dest['moduleName'] === "osjs") {
+            throw new Exception("Not allowed");
+        }
+
+        if ($src['path'] === $dest['path']) {
+            throw new Exception("Source and destination cannot be the same");
+        }
+
+        if (!file_exists($src_full_path)) {
+            throw new Exception("File does not exist");
+        }
+
+        if (!is_writeable(dirname($dest_full_path))) {
+            throw new Exception("Permission denied");
+        }
+
+        if (file_exists($dest_full_path)) {
+            throw new Exception("Destination file already exist");
+        }
+
+        if (rename($src_full_path, $dest_full_path)) {
+
+            $this->updateFile($src['path'], $src_full_path, $dest['path'], $dest_full_path);
+
+            return ['error' => false];
+        }
+
+        return ['error' => true];
     }
 
     public function unlink(Request $request)
     {
+        logger($request->all());
+
         return [];
     }
 
 
-    public function mkdir(Request $request, $file)
+    public function mkdir(Request $request)
     {
+        $file = $this->createOrGetFile($request, $this->user->sub);
+
         $file->is_directory = true;
 
         $file->save();
 
-        logger($request->all());
-
         $relative_path = $this->user_dir . DIRECTORY_SEPARATOR . $request->get('rel');
 
-        $this->filesystem->createDir($relative_path);
+        $full_path = $this->user_container . $relative_path;
+
+        mkdir($full_path);
 
         return ['error' => false];
     }
@@ -230,22 +292,29 @@ class UserFilesystemService
      * Check the existance of a file for a fully qualified path
      *
      * @param Request $request
-     * @param $file
      * @return array
      */
-    public function exists(Request $request, $file)
+    public function exists(Request $request)
     {
+        $file = $this->createOrGetFile($request, $this->user->sub);
+
+        //$this->checkUserReadPermissions($file);
+
         return ['status' => file_exists($file->full_path)];
     }
 
     /**
      * Get and return information on a file for a fully qualified path
      * @param Request $request
-     * @param $file
      * @return array
      */
-    public function fileinfo(Request $request, $file)
+    public function fileinfo(Request $request)
     {
+
+        $file = $this->createOrGetFile($request, $this->user->sub);
+
+        $this->checkUserReadPermissions($file);
+
         return [
             'filename' => $file->name,
             'path' => $file->virtual_path,
@@ -268,11 +337,14 @@ class UserFilesystemService
      * this method serves URL for the method FileSystemController@serveFile
      *
      * @param Request $request
-     * @param $file
      * @return string
      */
-    public function url(Request $request, $file)
+    public function url(Request $request)
     {
+        $file = $this->createOrGetFile($request, $this->user->sub);
+
+        $this->checkUserReadPermissions($file);
+
         if ($file->is_public) {
             return env('APP_URL') . '/api/filesystem/file?file_id=' . $file->uuid;
         }
@@ -326,22 +398,42 @@ class UserFilesystemService
         $file = File::where('virtual_path', $virtual_path)->first();
 
         if (!$file) {
-            return File::create([
-                'uuid' => Uuid::generate(4)->string,
-                'name' => utf8_encode($this->getFileName($full_path)),
-                'mime' => utf8_encode($this->getFileMime($full_path)),
-                'full_path' => utf8_encode($full_path),
-                'virtual_path' => utf8_encode($virtual_path),
-                'owner_id' => utf8_encode($user_sub),
-                'users' => [],
-                'groups' => [],
-                'organizations' => [],
-                'is_public' => false,
-                'is_directory' => false,
-            ]);
+            return $this->createFile($virtual_path, $full_path, $full_path);
         }
 
         return $file;
+    }
+
+    public function createFile($virtual_path, $full_path, $user_sub)
+    {
+        return File::create([
+            'uuid' => Uuid::generate(4)->string,
+            'name' => utf8_encode($this->getFileName($full_path)),
+            'mime' => utf8_encode($this->getFileMime($full_path)),
+            'full_path' => utf8_encode($full_path),
+            'virtual_path' => utf8_encode($virtual_path),
+            'owner_id' => utf8_encode($user_sub),
+            'users' => [],
+            'groups' => [],
+            'organizations' => [],
+            'is_public' => false,
+            'is_directory' => false,
+        ]);
+    }
+
+    public function updateFile($old_virtual_path, $old_full_path, $virtual_path, $full_path)
+    {
+
+        $file = File::where(['virtual_path' => $old_virtual_path, 'full_path' => $old_full_path])->first();
+
+        $file->update([
+            'name' => utf8_encode($this->getFileName($full_path)),
+            'mime' => utf8_encode($this->getFileMime($full_path)),
+            'full_path' => utf8_encode($full_path),
+            'virtual_path' => utf8_encode($virtual_path),
+        ]);
+
+
     }
 
     /**
@@ -477,21 +569,5 @@ class UserFilesystemService
             abort(403, 'Not Authorized');
         }
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////      General      /////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    /**
-     * Search the existance of the home directory of a given user based on his sub
-     *
-     * @param $identifier
-     * @return bool
-     */
-    public function checkExistence($identifier)
-    {
-        return $this->filesystem->exists($identifier);
-    }
-
 
 }
