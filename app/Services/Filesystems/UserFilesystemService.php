@@ -5,15 +5,10 @@ namespace App\Services\Filesystems;
 
 use App\File;
 use App\User;
-use ErrorException;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
-use League\Flysystem\Adapter\Local;
-use League\Flysystem\Filesystem;
-use League\Flysystem\Plugin\GetWithMetadata;
-use League\Flysystem\Plugin\ListWith;
 use Webpatser\Uuid\Uuid;
 
 class UserFilesystemService
@@ -53,6 +48,7 @@ class UserFilesystemService
 
         if ($this->filesystem->exists($this->user_dir) !== true && !is_dir($this->user_container . $this->user_dir)) {
             $this->filesystem->makeDirectory($this->user_dir);
+            $this->filesystem->makeDirectory($this->user_dir . DIRECTORY_SEPARATOR . '.desktop');
         }
 
     }
@@ -112,6 +108,11 @@ class UserFilesystemService
         return ['error' => false, 'result' => $content];
     }
 
+    /**
+     * @param Request $request
+     * @return array
+     * @throws Exception
+     */
     public function write(Request $request)
     {
         $file = $this->createOrGetFile($request, $this->user->sub);
@@ -178,6 +179,11 @@ class UserFilesystemService
 
     }
 
+    /**
+     * @param Request $request
+     * @return array
+     * @throws Exception
+     */
     public function copy(Request $request)
     {
         $data = $request->get('data');
@@ -220,6 +226,11 @@ class UserFilesystemService
         return ['error' => true];
     }
 
+    /**
+     * @param Request $request
+     * @return array
+     * @throws Exception
+     */
     public function move(Request $request)
     {
         logger($request->all());
@@ -263,6 +274,10 @@ class UserFilesystemService
         return ['error' => true];
     }
 
+    /**
+     * @param Request $request
+     * @return array
+     */
     public function unlink(Request $request)
     {
         logger($request->all());
@@ -271,6 +286,10 @@ class UserFilesystemService
     }
 
 
+    /**
+     * @param Request $request
+     * @return array
+     */
     public function mkdir(Request $request)
     {
         $file = $this->createOrGetFile($request, $this->user->sub);
@@ -356,6 +375,11 @@ class UserFilesystemService
         return env('APP_URL') . '/api/filesystem/file?file_id=' . $file->uuid . '&access_key=' . $access_key;
     }
 
+    /**
+     * @param Request $request
+     * @return array
+     * @throws Exception
+     */
     public function upload(Request $request)
     {
 
@@ -429,6 +453,12 @@ class UserFilesystemService
         return $file;
     }
 
+    /**
+     * @param $virtual_path
+     * @param $full_path
+     * @param $user_sub
+     * @return \App\File
+     */
     public function createFile($virtual_path, $full_path, $user_sub)
     {
         return File::create([
@@ -446,6 +476,12 @@ class UserFilesystemService
         ]);
     }
 
+    /**
+     * @param $old_virtual_path
+     * @param $old_full_path
+     * @param $virtual_path
+     * @param $full_path
+     */
     public function updateFile($old_virtual_path, $old_full_path, $virtual_path, $full_path)
     {
 

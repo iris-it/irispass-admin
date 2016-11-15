@@ -2,9 +2,6 @@
 
 namespace App\Http\Controllers;
 
-
-use Illuminate\Contracts\Auth\Guard;
-
 class HomeController extends Controller
 {
     /**
