@@ -7,7 +7,7 @@
     <section class="content">
         <div class="row">
             <div class="col-xs-12">
-                <div class="box">
+                <div class="box box-primary">
 
                     {!! Form::model($licence, ['method' => 'PUT','action' => ['Admin\LicenceController@update', $licence->id], 'class'=> 'form-horizontal']) !!}
 

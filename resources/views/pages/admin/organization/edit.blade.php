@@ -7,7 +7,7 @@
     <section class="content">
         <div class="row">
             <div class="col-xs-12">
-                <div class="box">
+                <div class="box box-primary">
                     {!! Form::model($organization, ['method' => 'PUT','action' => ['Admin\OrganizationController@update', $organization->id], 'class'=> 'form-horizontal']) !!}
 
                     <div class="box-header">

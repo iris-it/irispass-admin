@@ -1,22 +1,12 @@
-/**
- * First we will load all of this project's JavaScript dependencies which
- * include Vue and Vue Resource. This gives a great starting point for
- * building robust, powerful web applications using Vue and Laravel.
- */
-
-require('./bootstrap');
+window._ = require('lodash');
 
 /**
- * Next, we will create a fresh Vue application instance and attach it to
- * the body of the page. From here, you may begin adding components to
- * the application, or feel free to tweak this setup for your needs.
+ * We'll load jQuery and the Bootstrap jQuery plugin which provides support
+ * for JavaScript based Bootstrap features such as modals and tabs. This
+ * code may be modified to fit the specific needs of your application.
  */
 
-Vue.component('example', require('./components/Example.vue'));
-Vue.component('Login', require('./components/Auth/Login.vue'));
-Vue.component('Logout', require('./components/Auth/Logout.vue'));
-Vue.component('UserProfile', require('./components/Auth/UserProfile.vue'));
-
-const app = new Vue({
-    el: '#app'
-});
+window.$ = window.jQuery = require('jquery');
+require('bootstrap-sass');
+require('admin-lte');
+require('./core');

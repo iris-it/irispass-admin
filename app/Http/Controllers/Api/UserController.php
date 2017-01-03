@@ -13,6 +13,7 @@ class UserController extends ApiController
     public function getCurrentUser(Request $request, OsjsService $osjsService)
     {
         $user = auth('api')->user();
+
         $payload = auth('api')->payload();
 
         $osjsService->createDirectory('user', $payload->sub);

@@ -7,7 +7,7 @@
     <section class="content">
         <div class="row">
             <div class="col-xs-12">
-                <div class="box">
+                <div class="box box-primary">
 
                     {!! Form::model($role, ['method' => 'PUT','action' => ['Admin\RoleController@update', $role->id], 'class'=> 'form-horizontal']) !!}
 
@@ -65,7 +65,7 @@
 
         <div class="row">
             <div class="col-xs-12">
-                <div class="box">
+                <div class="box box-primary">
 
                     {!! Form::open(['method' => 'PUT','action' => ['Admin\RoleController@syncPermissions', $role->id], 'class'=> 'form-horizontal']) !!}
 

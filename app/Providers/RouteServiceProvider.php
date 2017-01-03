@@ -15,6 +15,9 @@ class RouteServiceProvider extends ServiceProvider
      * @var string
      */
     protected $namespace = 'App\Http\Controllers';
+
+    protected $namespace_admin = 'App\Http\Controllers\Admin';
+
     protected $namespace_api = 'App\Http\Controllers\Api';
 
     /**
@@ -24,7 +27,6 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
 
         parent::boot();
     }
@@ -38,9 +40,28 @@ class RouteServiceProvider extends ServiceProvider
     {
         $this->mapApiRoutes();
 
+        $this->mapAuthRoutes();
+
         $this->mapWebRoutes();
 
-        //
+        $this->mapWebAdminRoutes();
+    }
+
+    /**
+     * Define the "web" routes for the application.
+     *
+     * These routes all receive session state, CSRF protection, etc.
+     *
+     * @return void
+     */
+    protected function mapAuthRoutes()
+    {
+        Route::group([
+            'middleware' => 'web',
+            'namespace' => $this->namespace,
+        ], function ($router) {
+            require base_path('routes/auth.php');
+        });
     }
 
     /**
@@ -57,6 +78,24 @@ class RouteServiceProvider extends ServiceProvider
             'namespace' => $this->namespace,
         ], function ($router) {
             require base_path('routes/web.php');
+        });
+    }
+
+    /**
+     * Define the "web admin" routes for the application.
+     *
+     * These routes all receive session state, CSRF protection, etc.
+     *
+     * @return void
+     */
+    protected function mapWebAdminRoutes()
+    {
+        Route::group([
+            'middleware' => 'web',
+            'namespace' => $this->namespace_admin,
+            'prefix' => 'admin',
+        ], function ($router) {
+            require base_path('routes/web_admin.php');
         });
     }
 
